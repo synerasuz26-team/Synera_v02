@@ -1,0 +1,18 @@
+:root {
+  --surface: #ffffff;
+  --surface-muted: #f3f5f7;
+  --nav: #122b49;
+  --nav-hover: #1b3a5d;
+  --nav-text: #e6edf6;
+  --nav-muted: #aabbd0;
+  --primary: #1769c2;
+  --primary-hover: #1255a0;
+  --accent: #eaf3ff;
+  --text: #1f2937;
+  --text-muted: #526071;
+  --border: #e0e5eb;
+  --border-strong: #bdc7d3;
+  --danger: #b42318;
+  --radius: 5px;
+  --font-ui: 'Segoe UI', Arial, sans-serif;
+}

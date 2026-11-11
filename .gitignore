@@ -1,0 +1,12 @@
+node_modules
+dist
+.DS_Store
+*.local
+*.tsbuildinfo
+.tsupgrader
+_extract
+.env
+.env.*
+!.env.example
+backend/target/
+backend/target-ide/
