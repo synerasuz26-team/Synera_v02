@@ -27,29 +27,30 @@ mvn -f backend/pom.xml spring-boot:run
 
 Flyway tạo schema khi API khởi động. Chạy frontend bằng `npm run dev`; có thể đặt `VITE_API_BASE_URL` trong `.env.local` nếu API không chạy tại `http://127.0.0.1:8080`.
 
-## Railway API + Neon PostgreSQL
+## Railway API + PostgreSQL
 
-Railway chạy API; Neon cung cấp PostgreSQL. Không tạo thêm database Railway nếu dùng Neon.
+Backend và database đều chạy trong cùng Railway project. API dùng private network để kết nối PostgreSQL; không tạo public domain cho database.
 
-1. Tạo project Neon ở Singapore và lấy thông tin kết nối pooled (`-pooler`) từ Neon.
-2. Push mã nguồn lên GitHub rồi tạo Railway project bằng **Deploy from GitHub repo**. Với service API, đặt root directory là `/backend`; Railway sẽ build bằng Dockerfile trong thư mục đó.
-3. Chọn region **Southeast Asia (Singapore)** cho API để gần Neon.
-4. Thêm các biến này trong Railway → API service → **Variables**. Thay placeholder bằng thông tin Neon; `DB_PASSWORD` là secret:
+1. Tạo Railway project và thêm service **PostgreSQL**. Chọn region **Southeast Asia (Singapore)** khi tạo database; giữ database ở private network, không tạo public domain.
+2. Thêm service API bằng **Deploy from GitHub repo**, chọn repository `synerasuz26-team/Synera_v02` và đặt root directory là `/backend`. Railway sẽ build JAR bằng `backend/Dockerfile`.
+3. Chọn region **Southeast Asia (Singapore)** cho service API để cùng region với database.
+4. Trong Railway → API service → **Variables**, tham chiếu biến từ service PostgreSQL. Nếu tên service không phải `Postgres`, thay phần `Postgres` trong các tham chiếu:
 
    ```text
-   DB_URL=jdbc:postgresql://<pooled-host-from-neon>:5432/<database>?sslmode=require
-   DB_USER=<user-from-neon>
-   DB_PASSWORD=<password-from-neon>
+   DB_URL=jdbc:postgresql://${{Postgres.PGHOST}}:${{Postgres.PGPORT}}/${{Postgres.PGDATABASE}}
+   DB_USER=${{Postgres.PGUSER}}
+   DB_PASSWORD=${{Postgres.PGPASSWORD}}
    DB_POOL_SIZE=5
    APP_CORS_ALLOWED_ORIGINS=https://<your-frontend-domain>
    SESSION_COOKIE_SECURE=true
    SESSION_COOKIE_SAME_SITE=none
    ```
 
+   `DB_URL` dùng host/port private của Railway; không thêm `sslmode=require` trừ khi Railway yêu cầu cho kết nối đó.
 5. Tạo domain public cho API trong **Settings → Networking → Generate Domain**. Railway cấp `PORT`; Spring Boot đã lắng nghe port này. Đặt health check path là `/actuator/health`.
-6. Đặt `VITE_API_BASE_URL=https://<your-api-domain>` trong build environment của dịch vụ frontend.
+6. Nếu frontend chạy trên Railway, triển khai frontend thành service riêng và đặt `VITE_API_BASE_URL=https://<your-api-domain>` trong build environment. Cập nhật `APP_CORS_ALLOWED_ORIGINS` thành đúng domain frontend.
 
-Không commit mật khẩu database hoặc tệp `.env`. Không gửi `DB_PASSWORD` vào chat; nhập trực tiếp trong Railway Variables. Cấu hình trong repository không tự tạo GitHub repo, Neon project hoặc Railway service.
+Flyway tự tạo schema tài khoản và session khi API kết nối lần đầu. Không commit mật khẩu database hoặc tệp `.env`; đặt `DB_PASSWORD` bằng biến tham chiếu Railway, không nhập mật khẩu vào mã nguồn.
 
 ## Kiểm tra
 
