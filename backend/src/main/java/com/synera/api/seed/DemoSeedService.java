@@ -19,6 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 @Service
@@ -457,19 +458,31 @@ public class DemoSeedService {
             Instant createdAt = Instant.parse(text(row, "createdAt"));
             String status = text(row, "status");
             long sellOutGrossTotal = 0;
+            long sellInGrossTotal = 0;
             if (type.equals("SELL_IN")) {
                 jdbc.update("""
                         INSERT INTO order_si (
                             id, tenant_id, npp_tenant_id, order_code, status, idempotency_key,
-                            created_by, note, created_at, updated_at
+                            created_by, approved_by, note, created_at, updated_at,
+                            subtotal_vnd, total_vnd, submitted_at, received_at
                         )
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ON CONFLICT (tenant_id, order_code) DO UPDATE SET
                             npp_tenant_id = EXCLUDED.npp_tenant_id,
                             idempotency_key = EXCLUDED.idempotency_key,
-                            note = EXCLUDED.note
+                            approved_by = EXCLUDED.approved_by,
+                            note = EXCLUDED.note,
+                            subtotal_vnd = EXCLUDED.subtotal_vnd,
+                            total_vnd = EXCLUDED.total_vnd,
+                            submitted_at = EXCLUDED.submitted_at,
+                            received_at = EXCLUDED.received_at
                         """, orderId, tenantId, nppId, code, status, "seed:" + code,
-                        creatorId, "Dữ liệu demo", Timestamp.from(createdAt), Timestamp.from(createdAt));
+                        creatorId, Set.of("APPROVED", "SHIPPED", "RECEIVED", "RECONCILED", "PERIOD_CLOSED")
+                                .contains(status) ? userIds.get("nsx-leader@demo.synera.local") : null,
+                        "Dữ liệu demo", Timestamp.from(createdAt), Timestamp.from(createdAt),
+                        0L, 0L, status.equals("DRAFT") ? null : Timestamp.from(createdAt),
+                        Set.of("RECEIVED", "RECONCILED", "PERIOD_CLOSED").contains(status)
+                                ? Timestamp.from(createdAt) : null);
             } else {
                 String outletCode = text(row, "outlet");
                 jdbc.update("""
@@ -508,6 +521,8 @@ public class DemoSeedService {
                 long gross = Math.multiplyExact(price, line.path("orderedCases").asLong());
                 if (type.equals("SELL_OUT")) {
                     sellOutGrossTotal = Math.addExact(sellOutGrossTotal, gross);
+                } else {
+                    sellInGrossTotal = Math.addExact(sellInGrossTotal, gross);
                 }
                 String baseUnitCode = jdbc.queryForObject(
                         "SELECT base_unit_code FROM product WHERE id = ?", String.class, productIds.get(sku));
@@ -535,6 +550,22 @@ public class DemoSeedService {
                         type.equals("SELL_OUT") ? orderId : null, productIds.get(sku),
                             baseUnitCode, line.path("orderedCases").asLong(), ordered, confirmed,
                         shipped, received, price, gift, gross, gross);
+                if (type.equals("SELL_IN")
+                        && Set.of("RECEIVED", "RECONCILED", "PERIOD_CLOSED").contains(status)) {
+                    long damaged = line.path("damagedCases").asLong() * factor;
+                    jdbc.update("""
+                            INSERT INTO order_si_receipt_line (
+                                id, tenant_id, order_si_id, order_line_id, received_qty,
+                                damaged_qty, note, created_by
+                            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                            ON CONFLICT (order_si_id, order_line_id) DO UPDATE SET
+                                received_qty = EXCLUDED.received_qty,
+                                damaged_qty = EXCLUDED.damaged_qty,
+                                note = EXCLUDED.note
+                            """, id("order-si-receipt-line:" + code + ":" + lineId),
+                            tenantId, orderId, lineId, received, damaged,
+                            damaged > 0 ? "Có hàng bị hỏng." : "", creatorId);
+                }
                 if (type.equals("SELL_OUT") && status.equals("RECEIVED_ISSUE")) {
                     long damaged = !issueDamageAdded && received > 0 ? 1 : 0;
                     if (damaged > 0) {
@@ -559,6 +590,11 @@ public class DemoSeedService {
                         UPDATE order_so SET subtotal_vnd = ?, discount_vnd = 0, total_vnd = ?
                         WHERE id = ? AND tenant_id = ?
                         """, sellOutGrossTotal, sellOutGrossTotal, orderId, tenantId);
+            } else {
+                jdbc.update("""
+                        UPDATE order_si SET subtotal_vnd = ?, total_vnd = ?
+                        WHERE id = ? AND tenant_id = ?
+                        """, sellInGrossTotal, sellInGrossTotal, orderId, tenantId);
             }
             jdbc.update("""
                     INSERT INTO order_status_history (

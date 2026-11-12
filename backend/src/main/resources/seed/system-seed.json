@@ -3674,6 +3674,15 @@
     },
     {
       "flowType": "SELL_IN",
+      "fromStatus": "NEED_INFO",
+      "toStatus": "SUBMITTED",
+      "action": "Gửi lại sau khi bổ sung",
+      "requiredPermission": "order_si:create",
+      "actor": "NPP",
+      "notes": "Giữ lịch sử lần gửi trước."
+    },
+    {
+      "flowType": "SELL_IN",
       "fromStatus": "DRAFT",
       "toStatus": "CANCELLED",
       "action": "Hủy khi chưa duyệt",
