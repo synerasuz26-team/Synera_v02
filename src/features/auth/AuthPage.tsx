@@ -2,8 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { Brand } from '../../shared/Brand';
-import { loginAccount, registerAccount } from './authApi';
-import { passwordConfirmationError } from './validation';
+import { loginAccount } from './authApi';
 
 type AuthPageProps = {
   mode: 'login' | 'register';
@@ -19,27 +18,18 @@ export default function AuthPage({ mode }: AuthPageProps) {
     event.preventDefault();
     setError('');
     setMessage('');
+    if (isRegister) {
+      setMessage('Tài khoản SYNERA được cấp qua lời mời của quản trị viên.');
+      return;
+    }
+
     const form = new FormData(event.currentTarget);
     const email = String(form.get('email') ?? '');
     const password = String(form.get('password') ?? '');
-
-    if (isRegister) {
-      const validationError = passwordConfirmationError(password, form.get('confirmPassword'));
-      if (validationError) {
-        setError(validationError);
-        return;
-      }
-    }
-
     setIsSubmitting(true);
     try {
-      if (isRegister) {
-        await registerAccount(String(form.get('name') ?? ''), email, password);
-        setMessage('Tạo tài khoản thành công. Bạn đã được đăng nhập.');
-      } else {
-        await loginAccount(email, password);
-        setMessage('Đăng nhập thành công.');
-      }
+      await loginAccount(email, password);
+      setMessage('Đăng nhập thành công.');
     } catch (requestError) {
       setError(
         requestError instanceof Error
@@ -80,68 +70,57 @@ export default function AuthPage({ mode }: AuthPageProps) {
           <span className="soft-icon" aria-hidden="true">
             <ShieldCheck size={24} />
           </span>
-          <h2>{isRegister ? 'Tạo tài khoản' : 'Chào mừng trở lại'}</h2>
+          <h2>{isRegister ? 'Cần lời mời' : 'Chào mừng trở lại'}</h2>
           <p>
-            {isRegister ? 'Đăng ký tài khoản SYNERA.' : 'Đăng nhập vào tài khoản SYNERA của bạn.'}
+            {isRegister
+              ? 'Tài khoản cần được quản trị viên cấp theo đúng nhà sản xuất, nhà phân phối hoặc điểm bán.'
+              : 'Đăng nhập vào tài khoản SYNERA của bạn.'}
           </p>
           <div className="auth-notice" role="note">
-            Thông tin tài khoản được xử lý qua API bảo mật và lưu trên máy chủ.
+            {isRegister
+              ? 'Đăng ký công khai đã tắt để bảo đảm tài khoản được gắn đúng tenant và vai trò.'
+              : 'Thông tin tài khoản được xử lý qua API bảo mật và lưu trên máy chủ.'}
           </div>
-          <form className="stack" onSubmit={submit}>
-            {isRegister && (
+          {!isRegister && (
+            <form className="stack" onSubmit={submit}>
               <label>
-                Họ và tên
-                <input name="name" autoComplete="name" required />
+                Email
+                <input name="email" type="email" autoComplete="email" required />
               </label>
-            )}
-            <label>
-              Email
-              <input name="email" type="email" autoComplete="email" required />
-            </label>
-            <label>
-              Mật khẩu
-              <input
-                name="password"
-                type="password"
-                autoComplete={isRegister ? 'new-password' : 'current-password'}
-                minLength={12}
-                maxLength={200}
-                required
-              />
-            </label>
-            {isRegister && (
               <label>
-                Xác nhận mật khẩu
+                Mật khẩu
                 <input
-                  name="confirmPassword"
+                  name="password"
                   type="password"
-                  autoComplete="new-password"
+                  autoComplete="current-password"
                   minLength={12}
                   maxLength={200}
                   required
                 />
               </label>
-            )}
-            {error && (
-              <p className="form-error" role="alert">
-                {error}
-              </p>
-            )}
-            {message && (
-              <p className="auth-status" role="status">
-                {message}
-              </p>
-            )}
-            <button className="btn primary" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? 'Đang xử lý...' : isRegister ? 'Tạo tài khoản' : 'Đăng nhập'}
-              <ArrowRight size={16} />
-            </button>
-          </form>
+              {error && (
+                <p className="form-error" role="alert">
+                  {error}
+                </p>
+              )}
+              {message && (
+                <p className="auth-status" role="status">
+                  {message}
+                </p>
+              )}
+              <button className="btn primary" type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Đang xử lý...' : 'Đăng nhập'}
+                <ArrowRight size={16} />
+              </button>
+            </form>
+          )}
           <p className="auth-switch">
             {isRegister ? 'Đã có tài khoản?' : 'Chưa có tài khoản?'}{' '}
-            <Link to={isRegister ? '/login' : '/register'}>
-              {isRegister ? 'Đăng nhập' : 'Đăng ký'}
-            </Link>
+            {isRegister ? (
+              <Link to="/login">Đăng nhập</Link>
+            ) : (
+              <span>Liên hệ quản trị viên để nhận tài khoản.</span>
+            )}
           </p>
           <Link className="auth-home" to="/">
             Quay lại trang chủ

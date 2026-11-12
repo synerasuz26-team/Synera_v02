@@ -1,97 +1,80 @@
 package com.synera.api.auth;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.security.web.context.SecurityContextRepository;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping({"/api/auth", "/api/v1/auth"})
 public class AuthController {
-    private final AuthService authService;
-    private final AuthenticationManager authenticationManager;
-    private final SecurityContextRepository securityContextRepository;
+    private final LoginService loginService;
+    private final RefreshTokenService refreshTokens;
+    private final AuthIdentityRepository identities;
 
     public AuthController(
-            AuthService authService,
-            AuthenticationManager authenticationManager,
-            SecurityContextRepository securityContextRepository) {
-        this.authService = authService;
-        this.authenticationManager = authenticationManager;
-        this.securityContextRepository = securityContextRepository;
+            LoginService loginService,
+            RefreshTokenService refreshTokens,
+            AuthIdentityRepository identities) {
+        this.loginService = loginService;
+        this.refreshTokens = refreshTokens;
+        this.identities = identities;
     }
 
     @GetMapping("/csrf")
-    public CsrfResponse csrf(CsrfToken csrfToken) {
-        return new CsrfResponse(csrfToken.getToken());
+    public CsrfResponse csrf() {
+        return new CsrfResponse("stateless");
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(
-            @Valid @RequestBody CreateAccountRequest request,
-            HttpServletRequest servletRequest,
-            HttpServletResponse servletResponse) {
-        AppUser user = authService.register(request);
-        AuthenticatedUser principal = authenticate(user.getEmail(), request.password(), servletRequest, servletResponse);
-        return ResponseEntity.status(HttpStatus.CREATED).body(AuthResponse.from(principal));
+    public ResponseEntity<Void> register() {
+        throw new RegistrationDisabledException();
     }
 
     @PostMapping("/login")
     public AuthResponse login(
             @Valid @RequestBody LoginRequest request,
-            HttpServletRequest servletRequest,
-            HttpServletResponse servletResponse) {
-        AuthenticatedUser principal = authenticate(
-                request.email(),
-                request.password(),
-                servletRequest,
-                servletResponse);
-        return AuthResponse.from(principal);
+            @RequestHeader(value = "X-Device-Id", required = false) String deviceHeader) {
+        String deviceId = request.deviceId() == null || request.deviceId().isBlank()
+                ? deviceHeader
+                : request.deviceId();
+        return AuthResponse.from(loginService.login(request.email(), request.password(), deviceId));
     }
 
-    @GetMapping("/me")
-    public AuthResponse currentUser(@AuthenticationPrincipal AuthenticatedUser user) {
-        return AuthResponse.from(user);
+    @PostMapping("/refresh")
+    public AuthResponse refresh(@Valid @RequestBody RefreshRequest request) {
+        return AuthResponse.from(refreshTokens.rotate(request.refreshToken(), request.deviceId()));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletRequest request) {
-        if (request.getSession(false) != null) {
-            request.getSession(false).invalidate();
-        }
-        SecurityContextHolder.clearContext();
+    public ResponseEntity<Void> logout(
+            @Valid @RequestBody(required = false) LogoutRequest request,
+            @AuthenticationPrincipal Jwt jwt) {
+        UUID userId = jwt == null ? null : UUID.fromString(jwt.getSubject());
+        String deviceId = request != null && request.deviceId() != null
+                ? request.deviceId()
+                : jwt == null ? null : jwt.getClaimAsString("device_id");
+        String refreshToken = request == null ? null : request.refreshToken();
+        refreshTokens.logout(refreshToken, userId, deviceId);
         return ResponseEntity.noContent().build();
     }
 
-    private AuthenticatedUser authenticate(
-            String email,
-            String password,
-            HttpServletRequest request,
-            HttpServletResponse response) {
-        Authentication authentication = authenticationManager.authenticate(
-                UsernamePasswordAuthenticationToken.unauthenticated(email, password));
-        if (request.getSession(false) != null) {
-            request.changeSessionId();
-        }
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-        context.setAuthentication(authentication);
-        SecurityContextHolder.setContext(context);
-        securityContextRepository.saveContext(context, request, response);
-        return (AuthenticatedUser) authentication.getPrincipal();
+    @GetMapping("/me")
+    public AuthMeResponse currentUser(@AuthenticationPrincipal Jwt jwt) {
+        UUID userId = UUID.fromString(jwt.getSubject());
+        AuthIdentity identity = identities.findById(userId)
+                .filter(user -> user.userStatus().equals("ACTIVE") && user.tenantStatus().equals("ACTIVE"))
+                .orElseThrow(() -> new org.springframework.security.access.AccessDeniedException(
+                        "Tài khoản không còn hiệu lực."));
+        return AuthMeResponse.from(identity);
     }
 
     public record CsrfResponse(String token) {

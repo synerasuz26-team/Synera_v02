@@ -6,6 +6,7 @@
       "name": "Quản trị nền tảng SYNERA",
       "tenantType": "PLATFORM",
       "defaultScope": "A",
+      "assignmentLevel": 100,
       "description": "Nhân sự SYNERA. Tạo/khóa tenant, cấp tài khoản đầu tiên, vận hành hệ thống. KHÔNG có quyền đọc dữ liệu nghiệp vụ (đơn, công nợ, giá) của tenant."
     },
     {
@@ -13,6 +14,7 @@
       "name": "Lãnh đạo NSX (BOD)",
       "tenantType": "NSX",
       "defaultScope": "A",
+      "assignmentLevel": 100,
       "description": "Xem toàn bộ dữ liệu NSX, duyệt ngoại lệ lớn (vượt hạn mức, giá, CTKM, phiếu điều chỉnh), dùng số đã chốt để quyết định."
     },
     {
@@ -20,6 +22,7 @@
       "name": "Giám đốc kinh doanh khu vực (RSM)",
       "tenantType": "NSX",
       "defaultScope": "R",
+      "assignmentLevel": 80,
       "description": "Quản lý đội ngũ và phân bổ địa bàn trong khu vực/miền được giao (ví dụ Miền Nam). Duyệt ngoại lệ trong vùng."
     },
     {
@@ -27,6 +30,7 @@
       "name": "Quản lý bán hàng vùng (ASM)",
       "tenantType": "NSX",
       "defaultScope": "R",
+      "assignmentLevel": 60,
       "description": "Thiết lập tuyến/MCP, chuyển người đi thay, xử lý ngoại lệ trong vùng bán hàng được giao."
     },
     {
@@ -34,6 +38,7 @@
       "name": "Giám sát bán hàng (Sup)",
       "tenantType": "NSX",
       "defaultScope": "T",
+      "assignmentLevel": 40,
       "description": "Giám sát trực tiếp sales trên các tuyến được giao: MCP, ngoại lệ GPS, theo dõi thực hiện."
     },
     {
@@ -41,6 +46,7 @@
       "name": "Quản trị dữ liệu & cấu hình NSX",
       "tenantType": "NSX",
       "defaultScope": "A",
+      "assignmentLevel": 20,
       "description": "Danh mục SKU, bảng giá (soạn), cây tổ chức, người dùng, cấu hình quy tắc. Không tự duyệt thứ mình soạn."
     },
     {
@@ -48,6 +54,7 @@
       "name": "Tiếp nhận & duyệt đơn (Kinh doanh nội bộ)",
       "tenantType": "NSX",
       "defaultScope": "A",
+      "assignmentLevel": 20,
       "description": "Tiếp nhận đơn sell-in của NPP, kiểm điều kiện, duyệt trong ngưỡng, xuất kho/giao."
     },
     {
@@ -55,6 +62,7 @@
       "name": "Chăm sóc khách hàng / chất lượng NSX",
       "tenantType": "NSX",
       "defaultScope": "A",
+      "assignmentLevel": 20,
       "description": "Tiếp nhận & phân công ticket khiếu nại, đổi trả, phản hồi sản phẩm từ NPP/sales."
     },
     {
@@ -62,6 +70,7 @@
       "name": "Trade marketing NSX",
       "tenantType": "NSX",
       "defaultScope": "A",
+      "assignmentLevel": 20,
       "description": "Soạn CTKM/voucher, duyệt đề xuất hỗ trợ POSM/trưng bày của NPP, sự kiện, phản hồi thị trường."
     },
     {
@@ -69,6 +78,7 @@
       "name": "Kế toán NSX",
       "tenantType": "NSX",
       "defaultScope": "A",
+      "assignmentLevel": 20,
       "description": "Công nợ, hạn mức (đề xuất), đối soát, chốt kỳ, lập phiếu điều chỉnh."
     },
     {
@@ -76,6 +86,7 @@
       "name": "Sales thị trường (NSX)",
       "tenantType": "NSX",
       "defaultScope": "T",
+      "assignmentLevel": 20,
       "description": "Nhân viên NSX đi tuyến theo MCP: check-in, kiểm tra điểm bán, lập đơn sell-out gửi NPP, ghi nhận/lời hẹn. Chỉ thấy điểm bán trong tuyến."
     },
     {
@@ -83,6 +94,7 @@
       "name": "Đầu mối NPP (chủ/quản lý)",
       "tenantType": "NPP",
       "defaultScope": "A",
+      "assignmentLevel": 100,
       "description": "Người có quyền cao nhất trong NPP: đặt sell-in, duyệt đơn điểm bán, kế hoạch nhập, công nợ, người dùng NPP."
     },
     {
@@ -90,6 +102,7 @@
       "name": "Nhân viên đơn hàng & kho NPP",
       "tenantType": "NPP",
       "defaultScope": "A",
+      "assignmentLevel": 20,
       "description": "Xác nhận lượng đáp ứng, xuất giao, cập nhật tồn & sell-out, tạo đơn sell-in nháp."
     },
     {
@@ -97,6 +110,7 @@
       "name": "Kế toán NPP",
       "tenantType": "NPP",
       "defaultScope": "A",
+      "assignmentLevel": 20,
       "description": "Xem công nợ, hóa đơn, thanh toán; đối soát với NSX; xem báo cáo đã chốt."
     },
     {
@@ -104,6 +118,7 @@
       "name": "Chủ / đầu mối điểm bán",
       "tenantType": "OUTLET",
       "defaultScope": "A",
+      "assignmentLevel": 100,
       "description": "Khách B2B: đặt hàng, xác nhận thực nhận, phản ánh thiếu/hỏng, quản lý nhân viên cửa hàng."
     },
     {
@@ -111,6 +126,7 @@
       "name": "Nhân viên điểm bán",
       "tenantType": "OUTLET",
       "defaultScope": "A",
+      "assignmentLevel": 20,
       "description": "Đặt hàng và nhận hàng thay chủ cửa hàng; không quản lý người dùng."
     }
   ],

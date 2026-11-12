@@ -39,18 +39,20 @@ public class SystemSeedService {
 
     private void seedRoles(JsonNode rows) {
         rows.forEach(row -> jdbc.update("""
-                INSERT INTO role (code, name, tenant_type, default_scope, description)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO role (code, name, tenant_type, default_scope, assignment_level, description)
+                VALUES (?, ?, ?, ?, ?, ?)
                 ON CONFLICT (code) DO UPDATE SET
                     name = EXCLUDED.name,
                     tenant_type = EXCLUDED.tenant_type,
                     default_scope = EXCLUDED.default_scope,
+                    assignment_level = EXCLUDED.assignment_level,
                     description = EXCLUDED.description
                 """,
                 row.path("code").asText(),
                 row.path("name").asText(),
                 row.path("tenantType").asText(),
                 row.path("defaultScope").asText(),
+                row.path("assignmentLevel").asInt(),
                 row.path("description").asText()));
     }
 
