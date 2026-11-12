@@ -18,6 +18,10 @@ Endpoints can use `@RequirePermission("module:action")`; the permission intercep
 
 The initial browser client keeps tokens in module memory, not local storage. A full page reload therefore requires signing in again; durable browser refresh-cookie handling should be completed when the frontend API client is wired in a later phase.
 
+## Catalog and pricing API
+
+OpenAPI is served at `/api/v1/openapi` and Swagger UI at `/swagger-ui.html`. The first catalog API domain includes products, price-list workflows, effective sell-in/sell-out pricing, promotions, vouchers, and backend price/promotion calculation. Scoped price-list and promotion/voucher reads or workflows require `nppId` and `outletId` query parameters for R/T permissions; the backend verifies the full record scope before returning or changing it.
+
 ## Commands
 
 Run from the repository root in PowerShell, after setting database variables through a local secret manager or shell environment:

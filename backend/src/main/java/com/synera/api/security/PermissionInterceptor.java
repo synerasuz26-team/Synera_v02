@@ -29,11 +29,22 @@ public class PermissionInterceptor implements HandlerInterceptor {
             required = AnnotatedElementUtils.findMergedAnnotation(
                     method.getBeanType(), RequirePermission.class);
         }
-        if (required == null) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        RequireAnyPermission requiredAny = AnnotatedElementUtils.findMergedAnnotation(
+                method.getMethod(), RequireAnyPermission.class);
+        if (requiredAny == null) {
+            requiredAny = AnnotatedElementUtils.findMergedAnnotation(
+                    method.getBeanType(), RequireAnyPermission.class);
+        }
+        boolean permitted = required != null && authorization.hasPermission(authentication, required.value());
+        if (required == null && requiredAny == null) {
             return true;
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!authorization.hasPermission(authentication, required.value())) {
+        if (!permitted && requiredAny != null) {
+            permitted = java.util.Arrays.stream(requiredAny.value())
+                    .anyMatch(permission -> authorization.hasPermission(authentication, permission));
+        }
+        if (!permitted) {
             throw new AccessDeniedException("Bạn không có quyền thực hiện thao tác này.");
         }
         return true;

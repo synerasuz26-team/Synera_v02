@@ -6,11 +6,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import jakarta.validation.ConstraintViolationException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+    @ExceptionHandler(ApiProblem.class)
+    public ResponseEntity<ApiError> apiProblem(ApiProblem problem) {
+        return ResponseEntity.status(problem.status())
+                .body(new ApiError(problem.code(), problem.getMessage(), problem.details()));
+    }
+
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ApiError> invalidCredentials() {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -37,12 +47,40 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiError> invalidRequest(MethodArgumentNotValidException exception) {
-        String message = exception.getBindingResult().getFieldErrors().stream()
-                .map(error -> error.getDefaultMessage())
-                .filter(value -> value != null && !value.isBlank())
-                .findFirst()
-                .orElse("Thông tin gửi lên không hợp lệ.");
-        return ResponseEntity.badRequest().body(new ApiError("INVALID_REQUEST", message));
+        var fieldErrors = new java.util.LinkedHashMap<String, Object>();
+        exception.getBindingResult().getFieldErrors().forEach(error ->
+                fieldErrors.putIfAbsent(error.getField(), error.getDefaultMessage()));
+        return ResponseEntity.badRequest()
+                .body(new ApiError("INVALID_REQUEST", "Thông tin gửi lên không hợp lệ.", fieldErrors));
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiError> invalidParameters(ConstraintViolationException exception) {
+        var violations = new java.util.LinkedHashMap<String, Object>();
+        exception.getConstraintViolations().forEach(violation ->
+                violations.putIfAbsent(violation.getPropertyPath().toString(), violation.getMessage()));
+        return ResponseEntity.badRequest()
+                .body(new ApiError("INVALID_REQUEST", "Tham số gửi lên không hợp lệ.", violations));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiError> invalidParameterType(MethodArgumentTypeMismatchException exception) {
+        return ResponseEntity.badRequest().body(new ApiError(
+                "INVALID_REQUEST", "Kiểu tham số không hợp lệ.",
+                java.util.Map.of("field", exception.getName())));
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ApiError> missingParameter(MissingServletRequestParameterException exception) {
+        return ResponseEntity.badRequest().body(new ApiError(
+                "INVALID_REQUEST", "Thiếu tham số bắt buộc.",
+                java.util.Map.of("field", exception.getParameterName())));
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiError> unreadableBody() {
+        return ResponseEntity.badRequest()
+                .body(new ApiError("INVALID_REQUEST", "Nội dung JSON không hợp lệ."));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

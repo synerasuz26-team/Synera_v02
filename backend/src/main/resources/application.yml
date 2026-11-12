@@ -20,6 +20,12 @@ spring:
           time_zone: UTC
   flyway:
     enabled: true
+springdoc:
+  api-docs:
+    path: /api/v1/openapi
+  swagger-ui:
+    path: /swagger-ui.html
+  paths-to-match: /api/v1/**
 management:
   endpoints:
     web:
