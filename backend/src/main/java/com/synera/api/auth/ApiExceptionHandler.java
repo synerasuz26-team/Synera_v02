@@ -90,8 +90,22 @@ public class ApiExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ApiError> dataConflict() {
+    public ResponseEntity<ApiError> dataConflict(DataIntegrityViolationException exception) {
+        if (hasConstraint(exception, "period_closed_data_lock")) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new ApiError("PERIOD_CLOSED_LOCK",
+                            "Kỳ đã chốt; không thể thay đổi dữ liệu đơn nhập thuộc kỳ."));
+        }
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(new ApiError("DATA_CONFLICT", "Dữ liệu đã tồn tại."));
+    }
+
+    private boolean hasConstraint(Throwable exception, String constraintName) {
+        for (Throwable cause = exception; cause != null; cause = cause.getCause()) {
+            if (cause.getMessage() != null && cause.getMessage().contains(constraintName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
