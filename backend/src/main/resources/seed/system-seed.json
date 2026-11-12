@@ -1,0 +1,3714 @@
+{
+  "source": "SYNERA_PhanQuyen_RBAC.xlsx",
+  "roles": [
+    {
+      "code": "SYS_ADMIN",
+      "name": "Quản trị nền tảng SYNERA",
+      "tenantType": "PLATFORM",
+      "defaultScope": "A",
+      "description": "Nhân sự SYNERA. Tạo/khóa tenant, cấp tài khoản đầu tiên, vận hành hệ thống. KHÔNG có quyền đọc dữ liệu nghiệp vụ (đơn, công nợ, giá) của tenant."
+    },
+    {
+      "code": "NSX_LEADER",
+      "name": "Lãnh đạo NSX (BOD)",
+      "tenantType": "NSX",
+      "defaultScope": "A",
+      "description": "Xem toàn bộ dữ liệu NSX, duyệt ngoại lệ lớn (vượt hạn mức, giá, CTKM, phiếu điều chỉnh), dùng số đã chốt để quyết định."
+    },
+    {
+      "code": "NSX_RSM",
+      "name": "Giám đốc kinh doanh khu vực (RSM)",
+      "tenantType": "NSX",
+      "defaultScope": "R",
+      "description": "Quản lý đội ngũ và phân bổ địa bàn trong khu vực/miền được giao (ví dụ Miền Nam). Duyệt ngoại lệ trong vùng."
+    },
+    {
+      "code": "NSX_ASM",
+      "name": "Quản lý bán hàng vùng (ASM)",
+      "tenantType": "NSX",
+      "defaultScope": "R",
+      "description": "Thiết lập tuyến/MCP, chuyển người đi thay, xử lý ngoại lệ trong vùng bán hàng được giao."
+    },
+    {
+      "code": "NSX_SUP",
+      "name": "Giám sát bán hàng (Sup)",
+      "tenantType": "NSX",
+      "defaultScope": "T",
+      "description": "Giám sát trực tiếp sales trên các tuyến được giao: MCP, ngoại lệ GPS, theo dõi thực hiện."
+    },
+    {
+      "code": "NSX_ADMIN",
+      "name": "Quản trị dữ liệu & cấu hình NSX",
+      "tenantType": "NSX",
+      "defaultScope": "A",
+      "description": "Danh mục SKU, bảng giá (soạn), cây tổ chức, người dùng, cấu hình quy tắc. Không tự duyệt thứ mình soạn."
+    },
+    {
+      "code": "NSX_ORDER",
+      "name": "Tiếp nhận & duyệt đơn (Kinh doanh nội bộ)",
+      "tenantType": "NSX",
+      "defaultScope": "A",
+      "description": "Tiếp nhận đơn sell-in của NPP, kiểm điều kiện, duyệt trong ngưỡng, xuất kho/giao."
+    },
+    {
+      "code": "NSX_CS",
+      "name": "Chăm sóc khách hàng / chất lượng NSX",
+      "tenantType": "NSX",
+      "defaultScope": "A",
+      "description": "Tiếp nhận & phân công ticket khiếu nại, đổi trả, phản hồi sản phẩm từ NPP/sales."
+    },
+    {
+      "code": "NSX_TRADE",
+      "name": "Trade marketing NSX",
+      "tenantType": "NSX",
+      "defaultScope": "A",
+      "description": "Soạn CTKM/voucher, duyệt đề xuất hỗ trợ POSM/trưng bày của NPP, sự kiện, phản hồi thị trường."
+    },
+    {
+      "code": "NSX_ACCT",
+      "name": "Kế toán NSX",
+      "tenantType": "NSX",
+      "defaultScope": "A",
+      "description": "Công nợ, hạn mức (đề xuất), đối soát, chốt kỳ, lập phiếu điều chỉnh."
+    },
+    {
+      "code": "NSX_SALES",
+      "name": "Sales thị trường (NSX)",
+      "tenantType": "NSX",
+      "defaultScope": "T",
+      "description": "Nhân viên NSX đi tuyến theo MCP: check-in, kiểm tra điểm bán, lập đơn sell-out gửi NPP, ghi nhận/lời hẹn. Chỉ thấy điểm bán trong tuyến."
+    },
+    {
+      "code": "NPP_OWNER",
+      "name": "Đầu mối NPP (chủ/quản lý)",
+      "tenantType": "NPP",
+      "defaultScope": "A",
+      "description": "Người có quyền cao nhất trong NPP: đặt sell-in, duyệt đơn điểm bán, kế hoạch nhập, công nợ, người dùng NPP."
+    },
+    {
+      "code": "NPP_STAFF",
+      "name": "Nhân viên đơn hàng & kho NPP",
+      "tenantType": "NPP",
+      "defaultScope": "A",
+      "description": "Xác nhận lượng đáp ứng, xuất giao, cập nhật tồn & sell-out, tạo đơn sell-in nháp."
+    },
+    {
+      "code": "NPP_ACCT",
+      "name": "Kế toán NPP",
+      "tenantType": "NPP",
+      "defaultScope": "A",
+      "description": "Xem công nợ, hóa đơn, thanh toán; đối soát với NSX; xem báo cáo đã chốt."
+    },
+    {
+      "code": "OUTLET_OWNER",
+      "name": "Chủ / đầu mối điểm bán",
+      "tenantType": "OUTLET",
+      "defaultScope": "A",
+      "description": "Khách B2B: đặt hàng, xác nhận thực nhận, phản ánh thiếu/hỏng, quản lý nhân viên cửa hàng."
+    },
+    {
+      "code": "OUTLET_STAFF",
+      "name": "Nhân viên điểm bán",
+      "tenantType": "OUTLET",
+      "defaultScope": "A",
+      "description": "Đặt hàng và nhận hàng thay chủ cửa hàng; không quản lý người dùng."
+    }
+  ],
+  "permissions": [
+    {
+      "code": "app:admin_console",
+      "module": "0. Truy cập ứng dụng",
+      "description": "Đăng nhập Admin console nền tảng",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Ngoài phạm vi 3 web; backend vẫn cần để tạo tenant."
+    },
+    {
+      "code": "app:web_nsx",
+      "module": "0. Truy cập ứng dụng",
+      "description": "Đăng nhập Web điều hành NSX",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "app:portal_npp",
+      "module": "0. Truy cập ứng dụng",
+      "description": "Đăng nhập Portal NPP",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "app:portal_outlet",
+      "module": "0. Truy cập ứng dụng",
+      "description": "Đăng nhập Cổng điểm bán",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Cổng tự đặt là phạm vi đã bàn; điểm bán không mặc định có app riêng."
+    },
+    {
+      "code": "app:mobile_sales",
+      "module": "0. Truy cập ứng dụng",
+      "description": "Đăng nhập Mobile app Sales",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "tenant:manage",
+      "module": "1. Hệ thống & người dùng",
+      "description": "Tạo/khóa tenant (NSX, NPP, điểm bán), cấu hình nền tảng",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "user:view",
+      "module": "1. Hệ thống & người dùng",
+      "description": "Xem danh sách người dùng trong tenant",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "user:manage",
+      "module": "1. Hệ thống & người dùng",
+      "description": "Tạo/sửa/khóa người dùng",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Chỉ tạo user trong tenant mình; không tự nâng quyền (R15)."
+    },
+    {
+      "code": "role:assign",
+      "module": "1. Hệ thống & người dùng",
+      "description": "Gán/gỡ vai trò cho người dùng",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Chỉ gán vai cùng loại tenant và cấp ≤ cấp của mình; không tự gán cho mình."
+    },
+    {
+      "code": "role:manage",
+      "module": "1. Hệ thống & người dùng",
+      "description": "Tạo vai tùy chỉnh / sửa tập quyền của vai",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Tenant chỉ dùng vai preset ở MVP."
+    },
+    {
+      "code": "config:manage",
+      "module": "1. Hệ thống & người dùng",
+      "description": "Cấu hình quy tắc: ngưỡng duyệt, hạn mức mặc định, lịch chốt, SLA, ngưỡng cảnh báo",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "notification_rule:manage",
+      "module": "1. Hệ thống & người dùng",
+      "description": "Cấu hình quy tắc thông báo/nhắc việc",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "audit:view",
+      "module": "1. Hệ thống & người dùng",
+      "description": "Xem nhật ký thao tác (ai, khi nào, sửa gì)",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "org_unit:view",
+      "module": "2. Tổ chức, nhân sự & tuyến",
+      "description": "Xem cây tổ chức bán hàng (Miền → Vùng → Khu vực)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "org_unit:manage",
+      "module": "2. Tổ chức, nhân sự & tuyến",
+      "description": "Tạo/sửa cây tổ chức, vùng bán hàng, phân địa bàn",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "staff:view",
+      "module": "2. Tổ chức, nhân sự & tuyến",
+      "description": "Xem hồ sơ nhân sự thị trường, ca làm, chấm công",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "staff:manage",
+      "module": "2. Tổ chức, nhân sự & tuyến",
+      "description": "Quản lý hồ sơ nhân sự, ca, nghỉ phép",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "attendance:record",
+      "module": "2. Tổ chức, nhân sự & tuyến",
+      "description": "Chấm công ngày (khác lượt ghé điểm bán)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "route:view",
+      "module": "2. Tổ chức, nhân sự & tuyến",
+      "description": "Xem tuyến bán hàng & lịch MCP",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "route:manage",
+      "module": "2. Tổ chức, nhân sự & tuyến",
+      "description": "Tạo/sửa tuyến, thiết lập lịch MCP",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "route:assign",
+      "module": "2. Tổ chức, nhân sự & tuyến",
+      "description": "Gán điểm bán vào tuyến, gán sales phụ trách tuyến",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "visit:reassign",
+      "module": "2. Tổ chức, nhân sự & tuyến",
+      "description": "Chuyển lượt ghé/việc đang dở cho người đi thay",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Chỉ trong cùng NSX; giữ lịch sử người thực hiện (R13)."
+    },
+    {
+      "code": "product:view",
+      "module": "3. Sản phẩm, giá & ưu đãi",
+      "description": "Xem danh mục SKU",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "NPP/điểm bán chỉ thấy SKU được phân phối/bán cho mình."
+    },
+    {
+      "code": "product:manage",
+      "module": "3. Sản phẩm, giá & ưu đãi",
+      "description": "Tạo/sửa SKU, quy cách, đơn vị tính",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "price_sellin:view",
+      "module": "3. Sản phẩm, giá & ưu đãi",
+      "description": "Xem giá sell-in (NSX → NPP)",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Sales và điểm bán KHÔNG thấy giá sell-in (R11)."
+    },
+    {
+      "code": "price_sellout:view",
+      "module": "3. Sản phẩm, giá & ưu đãi",
+      "description": "Xem giá sell-out (NPP → điểm bán) hiệu lực",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "price_list:manage",
+      "module": "3. Sản phẩm, giá & ưu đãi",
+      "description": "Soạn/sửa bảng giá (cơ sở, theo phạm vi, theo NPP, theo khách)",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "price_list:approve",
+      "module": "3. Sản phẩm, giá & ưu đãi",
+      "description": "Duyệt/kích hoạt bảng giá",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Người soạn ≠ người duyệt (R04)."
+    },
+    {
+      "code": "promotion:view",
+      "module": "3. Sản phẩm, giá & ưu đãi",
+      "description": "Xem CTKM/voucher đang hiệu lực",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "promotion:manage",
+      "module": "3. Sản phẩm, giá & ưu đãi",
+      "description": "Soạn/sửa CTKM, voucher",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "promotion:approve",
+      "module": "3. Sản phẩm, giá & ưu đãi",
+      "description": "Duyệt CTKM và ngân sách",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Người soạn ≠ người duyệt (R04)."
+    },
+    {
+      "code": "npp:view",
+      "module": "4. Đối tác & điểm bán (CRM)",
+      "description": "Xem hồ sơ NPP",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "NPP chỉ thấy hồ sơ của chính mình."
+    },
+    {
+      "code": "npp:manage",
+      "module": "4. Đối tác & điểm bán (CRM)",
+      "description": "Tạo/sửa/ngừng NPP, gán vùng, hạn mức nền",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "outlet:view",
+      "module": "4. Đối tác & điểm bán (CRM)",
+      "description": "Xem hồ sơ điểm bán 360° (lịch sử đơn, nhu cầu, lời hẹn)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "NPP chỉ thấy điểm bán mình phục vụ; ghi chú nội bộ NSX/Sales ẩn với NPP và điểm bán (R12, R14)."
+    },
+    {
+      "code": "outlet:create",
+      "module": "4. Đối tác & điểm bán (CRM)",
+      "description": "Tạo điểm bán / khách tiềm năng mới",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Trạng thái PENDING cho đến khi được duyệt."
+    },
+    {
+      "code": "outlet:update",
+      "module": "4. Đối tác & điểm bán (CRM)",
+      "description": "Cập nhật hồ sơ điểm bán",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Điểm bán chỉ sửa thông tin liên hệ/địa chỉ nhận hàng của mình (R16)."
+    },
+    {
+      "code": "outlet:approve",
+      "module": "4. Đối tác & điểm bán (CRM)",
+      "description": "Duyệt điểm bán mới vào mạng lưới/tuyến",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "outlet:assign",
+      "module": "4. Đối tác & điểm bán (CRM)",
+      "description": "Gán NPP phục vụ / sales phụ trách cho điểm bán",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "contact:manage",
+      "module": "4. Đối tác & điểm bán (CRM)",
+      "description": "Quản lý người liên hệ của điểm bán/NPP",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "interaction:log",
+      "module": "4. Đối tác & điểm bán (CRM)",
+      "description": "Ghi cuộc gọi, trao đổi, nhu cầu, lý do chưa mua",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "visit:view",
+      "module": "5. Viếng thăm (Sales)",
+      "description": "Xem lượt ghé và kết quả",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "visit:checkin",
+      "module": "5. Viếng thăm (Sales)",
+      "description": "Check-in/out tại điểm bán (GPS)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "visit:record",
+      "module": "5. Viếng thăm (Sales)",
+      "description": "Ghi checklist, tồn tại điểm bán, trưng bày, nhu cầu, ảnh",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "visit:gps_override",
+      "module": "5. Viếng thăm (Sales)",
+      "description": "Xác nhận ngoại lệ GPS / ghé bù",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "checklist:manage",
+      "module": "5. Viếng thăm (Sales)",
+      "description": "Cấu hình checklist & tiêu chí kiểm tra điểm bán",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "daily_report:view",
+      "module": "5. Viếng thăm (Sales)",
+      "description": "Xem báo cáo ngày tự tổng hợp",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "daily_report:submit",
+      "module": "5. Viếng thăm (Sales)",
+      "description": "Kiểm tra, bổ sung và gửi báo cáo ngày",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "kpi:view",
+      "module": "5. Viếng thăm (Sales)",
+      "description": "Xem KPI nhân viên (lượt ghé, đơn, doanh số, chuyển đổi)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "order_so:view",
+      "module": "6. Đơn sell-out (NPP → điểm bán)",
+      "description": "Xem đơn sell-out",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Sales xem đơn của điểm bán trong tuyến; NPP xem đơn điểm bán mình phục vụ."
+    },
+    {
+      "code": "order_so:create",
+      "module": "6. Đơn sell-out (NPP → điểm bán)",
+      "description": "Tạo & gửi đơn (sales lập tại điểm bán / điểm bán tự đặt / NPP nhập hộ)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Giá + CTKM tự áp theo bảng hiệu lực; không sửa tay (R11). Hỗ trợ đơn nháp offline + mã gửi chống trùng (R19)."
+    },
+    {
+      "code": "order_so:update_draft",
+      "module": "6. Đơn sell-out (NPP → điểm bán)",
+      "description": "Sửa/hủy đơn khi NPP chưa xác nhận",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "order_so:fulfill_confirm",
+      "module": "6. Đơn sell-out (NPP → điểm bán)",
+      "description": "NPP xác nhận lượng đáp ứng & lịch giao",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Lưu riêng: số đặt / số xác nhận / số xuất / số thực nhận (R05)."
+    },
+    {
+      "code": "order_so:ship_update",
+      "module": "6. Đơn sell-out (NPP → điểm bán)",
+      "description": "Cập nhật xuất kho & trạng thái giao",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "order_so:receive_confirm",
+      "module": "6. Đơn sell-out (NPP → điểm bán)",
+      "description": "Xác nhận thực nhận (đủ/thiếu/hỏng)",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Sales chỉ xác nhận thay khi điểm bán cho phép và ghi rõ nguồn xác nhận; quá hạn KHÔNG tự xác nhận đủ (R08)."
+    },
+    {
+      "code": "order_so:cancel_confirmed",
+      "module": "6. Đơn sell-out (NPP → điểm bán)",
+      "description": "Hủy/điều chỉnh đơn sau khi NPP đã xác nhận",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Bắt buộc ghi lý do; thông báo sales và điểm bán."
+    },
+    {
+      "code": "return:create",
+      "module": "6. Đơn sell-out (NPP → điểm bán)",
+      "description": "Tạo yêu cầu đổi trả / giao bù",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "return:approve",
+      "module": "6. Đơn sell-out (NPP → điểm bán)",
+      "description": "Duyệt đổi trả / phương án giao bù (NPP duyệt cho điểm bán)",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "order_si:view",
+      "module": "7. Đơn sell-in (NSX → NPP)",
+      "description": "Xem đơn sell-in",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Sales/điểm bán không xem đơn sell-in."
+    },
+    {
+      "code": "order_si:create",
+      "module": "7. Đơn sell-in (NSX → NPP)",
+      "description": "Tạo & gửi đơn nhập hàng, đặt lại đơn cũ một chạm",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Kiểm hạn mức ngay khi gửi; vượt ngưỡng → HELD_CREDIT."
+    },
+    {
+      "code": "order_si:cancel_draft",
+      "module": "7. Đơn sell-in (NSX → NPP)",
+      "description": "Sửa/hủy đơn khi NSX chưa duyệt",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "order_si:review",
+      "module": "7. Đơn sell-in (NSX → NPP)",
+      "description": "Tiếp nhận & kiểm điều kiện đơn (CTKM, tồn, công nợ)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "order_si:approve",
+      "module": "7. Đơn sell-in (NSX → NPP)",
+      "description": "Duyệt đơn trong hạn mức",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Theo bậc duyệt ở sheet Rules (R07); người tạo không tự duyệt (R04)."
+    },
+    {
+      "code": "order_si:approve_over_limit",
+      "module": "7. Đơn sell-in (NSX → NPP)",
+      "description": "Duyệt đơn vượt hạn mức công nợ / ngoại lệ chính sách",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "order_si:reject",
+      "module": "7. Đơn sell-in (NSX → NPP)",
+      "description": "Từ chối / yêu cầu bổ sung thông tin",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Bắt buộc ghi lý do."
+    },
+    {
+      "code": "order_si:ship",
+      "module": "7. Đơn sell-in (NSX → NPP)",
+      "description": "Xuất kho & cập nhật giao hàng phía NSX",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "order_si:receive_confirm",
+      "module": "7. Đơn sell-in (NSX → NPP)",
+      "description": "NPP xác nhận thực nhận (đủ/thiếu/hỏng/hoàn)",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Quá hạn → nhắc và leo thang, không tự xác nhận đủ (R08)."
+    },
+    {
+      "code": "credit_limit:view",
+      "module": "8. Công nợ & đối soát",
+      "description": "Xem hạn mức & công nợ còn lại",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "NPP_STAFF chỉ thấy 'hạn mức còn lại' (field-level, R12)."
+    },
+    {
+      "code": "credit_limit:manage",
+      "module": "8. Công nợ & đối soát",
+      "description": "Đề xuất điều chỉnh hạn mức",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "credit_limit:approve",
+      "module": "8. Công nợ & đối soát",
+      "description": "Duyệt hạn mức",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Người đề xuất ≠ người duyệt (R04)."
+    },
+    {
+      "code": "debt:view",
+      "module": "8. Công nợ & đối soát",
+      "description": "Xem công nợ, hóa đơn, lịch sử thanh toán, khoản khấu trừ",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "payment:record",
+      "module": "8. Công nợ & đối soát",
+      "description": "Ghi nhận thanh toán/khấu trừ (phía NSX)",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "payment:declare",
+      "module": "8. Công nợ & đối soát",
+      "description": "NPP khai báo thanh toán chờ đối soát",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "reconciliation:view",
+      "module": "8. Công nợ & đối soát",
+      "description": "Xem đối soát",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "reconciliation:confirm",
+      "module": "8. Công nợ & đối soát",
+      "description": "Xác nhận số đối soát phần mình",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "reconciliation:resolve_exception",
+      "module": "8. Công nợ & đối soát",
+      "description": "Xử lý ngoại lệ lệch ba bên (đặt – xuất – nhận)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "period:close",
+      "module": "8. Công nợ & đối soát",
+      "description": "Chốt ngày/tuần/tháng",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Sau chốt không sửa trực tiếp (R09)."
+    },
+    {
+      "code": "period:adjust_create",
+      "module": "8. Công nợ & đối soát",
+      "description": "Lập phiếu điều chỉnh số đã chốt",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Ghi lý do; hiện ở kỳ phát sinh."
+    },
+    {
+      "code": "period:adjust_approve",
+      "module": "8. Công nợ & đối soát",
+      "description": "Duyệt phiếu điều chỉnh",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Người lập ≠ người duyệt (R04)."
+    },
+    {
+      "code": "inventory:view",
+      "module": "9. Tồn kho, sell-out & kế hoạch",
+      "description": "Xem tồn kho NPP theo SKU",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "inventory:update",
+      "module": "9. Tồn kho, sell-out & kế hoạch",
+      "description": "Cập nhật / import tồn kho NPP",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "sellout_data:view",
+      "module": "9. Tồn kho, sell-out & kế hoạch",
+      "description": "Xem sell-out, tốc độ tiêu thụ, sell-through",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "sellout_data:submit",
+      "module": "9. Tồn kho, sell-out & kế hoạch",
+      "description": "NPP cập nhật / import doanh số bán ra",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "demand_plan:view",
+      "module": "9. Tồn kho, sell-out & kế hoạch",
+      "description": "Xem kế hoạch nhập hàng của NPP",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "demand_plan:submit",
+      "module": "9. Tồn kho, sell-out & kế hoạch",
+      "description": "NPP gửi kế hoạch nhập hàng (SKU, số lượng, thời gian)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "target:view",
+      "module": "9. Tồn kho, sell-out & kế hoạch",
+      "description": "Xem chỉ tiêu, mức hoàn thành, điều kiện thưởng/chiết khấu",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "target:manage",
+      "module": "9. Tồn kho, sell-out & kế hoạch",
+      "description": "Thiết lập chỉ tiêu & điều kiện thưởng",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "ticket:view",
+      "module": "10. Hỗ trợ & phản ánh",
+      "description": "Xem ticket",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Người chỉ thấy ticket do mình tạo/được giao hoặc thuộc phạm vi xem."
+    },
+    {
+      "code": "ticket:create",
+      "module": "10. Hỗ trợ & phản ánh",
+      "description": "Tạo ticket (giao thiếu, hỏng, đổi trả, công nợ, hỗ trợ khác)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Gắn mã đơn/SKU/lô/ảnh/số lượng."
+    },
+    {
+      "code": "ticket:assign",
+      "module": "10. Hỗ trợ & phản ánh",
+      "description": "Phân công / chuyển bộ phận xử lý",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "ticket:process",
+      "module": "10. Hỗ trợ & phản ánh",
+      "description": "Xử lý, cập nhật trạng thái, đóng ticket",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Chỉ người được giao/bộ phận theo loại ticket (R17)."
+    },
+    {
+      "code": "ticket:escalate",
+      "module": "10. Hỗ trợ & phản ánh",
+      "description": "Chuyển NSX khi cần hỗ trợ từ hãng",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "trade_request:view",
+      "module": "10. Hỗ trợ & phản ánh",
+      "description": "Xem đề xuất hỗ trợ trade marketing (POSM, trưng bày, ngân sách)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "trade_request:create",
+      "module": "10. Hỗ trợ & phản ánh",
+      "description": "NPP gửi đề xuất hỗ trợ trade marketing",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "trade_request:approve",
+      "module": "10. Hỗ trợ & phản ánh",
+      "description": "Duyệt đề xuất & phân bổ ngân sách trade",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Bậc duyệt theo ngân sách (cấu hình)."
+    },
+    {
+      "code": "market_feedback:create",
+      "module": "10. Hỗ trợ & phản ánh",
+      "description": "Ghi nhận phản hồi thị trường (chất lượng, bao bì, giá, quy cách)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "market_feedback:view",
+      "module": "10. Hỗ trợ & phản ánh",
+      "description": "Xem tổng hợp phản hồi thị trường",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "task:view",
+      "module": "11. Công việc & lời hẹn",
+      "description": "Xem công việc / lời hẹn / nhắc việc",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "task:create",
+      "module": "11. Công việc & lời hẹn",
+      "description": "Tạo việc / lời hẹn (có người phụ trách, hạn, trạng thái)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "task:assign",
+      "module": "11. Công việc & lời hẹn",
+      "description": "Giao việc / bàn giao việc đang dở",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "report:ops",
+      "module": "12. Báo cáo & dashboard",
+      "description": "Báo cáo vận hành lớp 1 (tạm tính, real-time)",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": "Hiển thị nhãn 'Tạm tính, cập nhật lúc hh:mm' (R10)."
+    },
+    {
+      "code": "report:official",
+      "module": "12. Báo cáo & dashboard",
+      "description": "Báo cáo quản trị lớp 2 (đã chốt)",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": "Nguồn duy nhất cho thưởng, thanh toán, báo cáo chính thức (R10)."
+    },
+    {
+      "code": "report:export",
+      "module": "12. Báo cáo & dashboard",
+      "description": "Xuất báo cáo (Excel/PDF)",
+      "sensitive": true,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "report:distributor_perf",
+      "module": "12. Báo cáo & dashboard",
+      "description": "Xem hiệu quả & xếp hạng từng NPP",
+      "sensitive": false,
+      "phase": "MVP",
+      "notes": ""
+    },
+    {
+      "code": "event:manage",
+      "module": "13. Sự kiện & kết nối",
+      "description": "Tạo sự kiện, trang đăng ký, check-in QR, khảo sát",
+      "sensitive": false,
+      "phase": "Sau MVP",
+      "notes": ""
+    },
+    {
+      "code": "event:participate",
+      "module": "13. Sự kiện & kết nối",
+      "description": "Đăng ký / tham dự sự kiện, trả lời khảo sát",
+      "sensitive": false,
+      "phase": "Sau MVP",
+      "notes": ""
+    },
+    {
+      "code": "ai:order_draft",
+      "module": "14. AI (hướng nâng cấp)",
+      "description": "AI chuyển lời nói/tin nhắn thành dòng đơn nháp (không tự gửi)",
+      "sensitive": false,
+      "phase": "Phase 2",
+      "notes": "Người dùng phải kiểm tra SKU, đơn vị, số lượng, điều kiện (R21)."
+    },
+    {
+      "code": "ai:display_check",
+      "module": "14. AI (hướng nâng cấp)",
+      "description": "Gửi ảnh kệ để AI gợi ý chấm trưng bày",
+      "sensitive": false,
+      "phase": "Phase 2",
+      "notes": ""
+    },
+    {
+      "code": "ai:display_review",
+      "module": "14. AI (hướng nâng cấp)",
+      "description": "Xem & xác nhận/đổi điểm trưng bày do AI đề xuất",
+      "sensitive": true,
+      "phase": "Phase 2",
+      "notes": "AI không tự duyệt kết quả cuối (R21)."
+    }
+  ],
+  "rolePermissions": [
+    {
+      "roleCode": "SYS_ADMIN",
+      "permissionCode": "app:admin_console",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "app:web_nsx",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "app:web_nsx",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "app:web_nsx",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "app:web_nsx",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "app:web_nsx",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "app:web_nsx",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "app:web_nsx",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "app:web_nsx",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "app:web_nsx",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "app:portal_npp",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "app:portal_npp",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "app:portal_npp",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "app:portal_outlet",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "app:portal_outlet",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "app:mobile_sales",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "app:mobile_sales",
+      "scope": "O"
+    },
+    {
+      "roleCode": "SYS_ADMIN",
+      "permissionCode": "tenant:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "SYS_ADMIN",
+      "permissionCode": "user:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "user:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "user:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "user:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "user:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "user:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "user:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "SYS_ADMIN",
+      "permissionCode": "user:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "user:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "user:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "user:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "user:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "SYS_ADMIN",
+      "permissionCode": "role:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "role:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "role:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "role:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "role:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "SYS_ADMIN",
+      "permissionCode": "role:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "config:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "config:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "notification_rule:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "SYS_ADMIN",
+      "permissionCode": "audit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "audit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "audit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "audit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "org_unit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "org_unit:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "org_unit:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "org_unit:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "org_unit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "org_unit:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "org_unit:manage",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "org_unit:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "staff:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "staff:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "staff:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "staff:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "staff:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "staff:manage",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "staff:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "attendance:record",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "attendance:record",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "route:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "route:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "route:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "route:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "route:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "route:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "route:manage",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "route:manage",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "route:manage",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "route:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "route:assign",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "route:assign",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "route:assign",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "route:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "visit:reassign",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "visit:reassign",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "visit:reassign",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "product:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "product:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "price_sellin:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "price_sellin:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "price_sellin:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "price_sellin:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "price_sellin:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "price_sellin:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "price_sellin:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "price_sellin:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "price_sellin:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "price_sellin:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "price_sellout:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "price_sellout:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "price_sellout:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "price_sellout:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "price_sellout:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "price_sellout:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "price_sellout:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "price_sellout:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "price_sellout:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "price_sellout:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "price_sellout:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "price_sellout:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "price_sellout:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "price_sellout:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "price_list:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "price_list:approve",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "promotion:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "promotion:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "promotion:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "promotion:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "promotion:approve",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "promotion:approve",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "npp:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "npp:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "npp:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "npp:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "npp:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "npp:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "npp:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "npp:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "npp:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "npp:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "npp:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "npp:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "outlet:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "outlet:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "outlet:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "outlet:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "outlet:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "outlet:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "outlet:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "outlet:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "outlet:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "outlet:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "outlet:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "outlet:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "outlet:create",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "outlet:create",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "outlet:create",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "outlet:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "outlet:create",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "outlet:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "outlet:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "outlet:update",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "outlet:update",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "outlet:update",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "outlet:update",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "outlet:update",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "outlet:update",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "outlet:update",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "outlet:approve",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "outlet:approve",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "outlet:approve",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "outlet:approve",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "outlet:assign",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "outlet:assign",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "outlet:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "contact:manage",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "contact:manage",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "contact:manage",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "contact:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "contact:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "contact:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "contact:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "interaction:log",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "interaction:log",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "interaction:log",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "interaction:log",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "interaction:log",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "visit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "visit:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "visit:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "visit:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "visit:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "visit:checkin",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "visit:checkin",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "visit:record",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "visit:record",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "visit:gps_override",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "visit:gps_override",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "visit:gps_override",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "checklist:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "checklist:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "daily_report:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "daily_report:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "daily_report:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "daily_report:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "daily_report:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "daily_report:submit",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "kpi:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "kpi:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "kpi:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "kpi:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "kpi:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "order_so:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "order_so:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "order_so:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "order_so:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "order_so:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "order_so:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "order_so:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "order_so:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "order_so:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "order_so:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "order_so:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "order_so:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "order_so:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "order_so:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "order_so:create",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "order_so:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "order_so:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "order_so:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "order_so:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "order_so:update_draft",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "order_so:update_draft",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "order_so:update_draft",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "order_so:update_draft",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "order_so:update_draft",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "order_so:fulfill_confirm",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "order_so:fulfill_confirm",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "order_so:ship_update",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "order_so:ship_update",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "order_so:receive_confirm",
+      "scope": "T"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "order_so:receive_confirm",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "order_so:receive_confirm",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "order_so:cancel_confirmed",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "return:create",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "return:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "return:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "return:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "return:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "return:approve",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "order_si:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "order_si:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "order_si:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "order_si:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "order_si:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "order_si:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "order_si:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "order_si:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "order_si:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "order_si:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "order_si:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "order_si:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "order_si:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "order_si:cancel_draft",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "order_si:cancel_draft",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "order_si:review",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "order_si:review",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "order_si:approve",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "order_si:approve",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "order_si:approve",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "order_si:approve",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "order_si:approve_over_limit",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "order_si:approve_over_limit",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "order_si:reject",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "order_si:reject",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "order_si:reject",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "order_si:reject",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "order_si:ship",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "order_si:receive_confirm",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "order_si:receive_confirm",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "credit_limit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "credit_limit:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "credit_limit:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "credit_limit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "credit_limit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "credit_limit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "credit_limit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "credit_limit:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "credit_limit:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "credit_limit:approve",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "debt:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "debt:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "debt:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "debt:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "debt:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "debt:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "payment:record",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "payment:declare",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "payment:declare",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "reconciliation:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "reconciliation:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "reconciliation:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "reconciliation:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "reconciliation:confirm",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "reconciliation:confirm",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "reconciliation:confirm",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "reconciliation:resolve_exception",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "reconciliation:resolve_exception",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "reconciliation:resolve_exception",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "reconciliation:resolve_exception",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "reconciliation:resolve_exception",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "period:close",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "period:adjust_create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "period:adjust_approve",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "inventory:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "inventory:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "inventory:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "inventory:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "inventory:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "inventory:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "inventory:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "inventory:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "inventory:update",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "inventory:update",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "sellout_data:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "sellout_data:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "sellout_data:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "sellout_data:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "sellout_data:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "sellout_data:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "sellout_data:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "sellout_data:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "sellout_data:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "sellout_data:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "sellout_data:submit",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "sellout_data:submit",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "demand_plan:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "demand_plan:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "demand_plan:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "demand_plan:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "demand_plan:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "demand_plan:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "demand_plan:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "demand_plan:submit",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "demand_plan:submit",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "target:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "target:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "target:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "target:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "target:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "target:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "target:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "target:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "target:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "target:manage",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "target:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "ticket:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "ticket:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "ticket:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "ticket:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "ticket:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "ticket:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "ticket:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "ticket:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "ticket:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "ticket:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "ticket:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "ticket:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "ticket:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "ticket:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "ticket:create",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "ticket:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "ticket:create",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "ticket:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "ticket:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "ticket:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "ticket:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "ticket:assign",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "ticket:assign",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "ticket:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "ticket:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "ticket:process",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "ticket:process",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "ticket:process",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "ticket:process",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "ticket:process",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "ticket:process",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "ticket:process",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "ticket:process",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "ticket:escalate",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "ticket:escalate",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "ticket:escalate",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "trade_request:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "trade_request:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "trade_request:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "trade_request:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "trade_request:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "trade_request:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "trade_request:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "trade_request:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "trade_request:approve",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "trade_request:approve",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "trade_request:approve",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "market_feedback:create",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "market_feedback:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "market_feedback:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "market_feedback:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "market_feedback:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "market_feedback:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "market_feedback:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "market_feedback:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "task:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "task:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "task:view",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "task:view",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "task:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "task:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "task:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "task:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "task:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "task:view",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "task:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "task:view",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "task:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "task:create",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "task:create",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "task:create",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "task:create",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "task:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "task:create",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "task:create",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "task:create",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "task:create",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "task:create",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "task:create",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "task:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "task:assign",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "task:assign",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "task:assign",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "task:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "task:assign",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "report:ops",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "report:ops",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "report:ops",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "report:ops",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_ORDER",
+      "permissionCode": "report:ops",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_CS",
+      "permissionCode": "report:ops",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "report:ops",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "report:ops",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "report:ops",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "report:ops",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "report:ops",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "report:official",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "report:official",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "report:official",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "report:official",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "report:official",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "report:official",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "report:official",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "report:export",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "report:export",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "report:export",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "report:export",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "report:export",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_ACCT",
+      "permissionCode": "report:export",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_LEADER",
+      "permissionCode": "report:distributor_perf",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "report:distributor_perf",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "report:distributor_perf",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "report:distributor_perf",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ACCT",
+      "permissionCode": "report:distributor_perf",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_ADMIN",
+      "permissionCode": "event:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "event:manage",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "event:participate",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "event:participate",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "event:participate",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "event:participate",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "event:participate",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "ai:order_draft",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NPP_OWNER",
+      "permissionCode": "ai:order_draft",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NPP_STAFF",
+      "permissionCode": "ai:order_draft",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_OWNER",
+      "permissionCode": "ai:order_draft",
+      "scope": "A"
+    },
+    {
+      "roleCode": "OUTLET_STAFF",
+      "permissionCode": "ai:order_draft",
+      "scope": "A"
+    },
+    {
+      "roleCode": "NSX_SALES",
+      "permissionCode": "ai:display_check",
+      "scope": "O"
+    },
+    {
+      "roleCode": "NSX_RSM",
+      "permissionCode": "ai:display_review",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_ASM",
+      "permissionCode": "ai:display_review",
+      "scope": "R"
+    },
+    {
+      "roleCode": "NSX_SUP",
+      "permissionCode": "ai:display_review",
+      "scope": "T"
+    },
+    {
+      "roleCode": "NSX_TRADE",
+      "permissionCode": "ai:display_review",
+      "scope": "A"
+    }
+  ],
+  "orderTransitions": [
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "DRAFT",
+      "toStatus": "SUBMITTED",
+      "action": "Gửi đơn",
+      "requiredPermission": "order_so:create",
+      "actor": "Sales (T) / điểm bán (A) / NPP nhập hộ",
+      "notes": "Giá + CTKM tự áp; có mã gửi chống trùng (R19)."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "SUBMITTED",
+      "toStatus": "CONFIRMED",
+      "action": "NPP xác nhận đủ lượng",
+      "requiredPermission": "order_so:fulfill_confirm",
+      "actor": "NPP",
+      "notes": "Lưu số xác nhận = số đặt."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "SUBMITTED",
+      "toStatus": "PARTIALLY_CONFIRMED",
+      "action": "NPP xác nhận một phần",
+      "requiredPermission": "order_so:fulfill_confirm",
+      "actor": "NPP",
+      "notes": "Lưu số xác nhận < số đặt; ghi lý do và ngày giao bù."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "SUBMITTED",
+      "toStatus": "REJECTED_BY_NPP",
+      "action": "NPP không đáp ứng",
+      "requiredPermission": "order_so:fulfill_confirm",
+      "actor": "NPP",
+      "notes": "Bắt buộc ghi lý do; thông báo sales."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "DRAFT",
+      "toStatus": "CANCELLED",
+      "action": "Hủy khi chưa xác nhận",
+      "requiredPermission": "order_so:update_draft",
+      "actor": "Người tạo",
+      "notes": "Chỉ khi NPP chưa xác nhận."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "SUBMITTED",
+      "toStatus": "CANCELLED",
+      "action": "Hủy khi chưa xác nhận",
+      "requiredPermission": "order_so:update_draft",
+      "actor": "Người tạo",
+      "notes": "Chỉ khi NPP chưa xác nhận."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "CONFIRMED",
+      "toStatus": "CANCELLED",
+      "action": "Hủy sau xác nhận",
+      "requiredPermission": "order_so:cancel_confirmed",
+      "actor": "NPP_OWNER",
+      "notes": "Ghi lý do; thông báo sales và điểm bán."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "PARTIALLY_CONFIRMED",
+      "toStatus": "CANCELLED",
+      "action": "Hủy sau xác nhận",
+      "requiredPermission": "order_so:cancel_confirmed",
+      "actor": "NPP_OWNER",
+      "notes": "Ghi lý do; thông báo sales và điểm bán."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "CONFIRMED",
+      "toStatus": "SHIPPED",
+      "action": "Xuất kho / giao",
+      "requiredPermission": "order_so:ship_update",
+      "actor": "NPP",
+      "notes": "Lưu số thực xuất."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "PARTIALLY_CONFIRMED",
+      "toStatus": "SHIPPED",
+      "action": "Xuất kho / giao",
+      "requiredPermission": "order_so:ship_update",
+      "actor": "NPP",
+      "notes": "Lưu số thực xuất."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "SHIPPED",
+      "toStatus": "RECEIVED_FULL",
+      "action": "Xác nhận nhận đủ",
+      "requiredPermission": "order_so:receive_confirm",
+      "actor": "Điểm bán (hoặc sales thay khi được phép)",
+      "notes": "Lưu số thực nhận."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "SHIPPED",
+      "toStatus": "RECEIVED_ISSUE",
+      "action": "Báo thiếu/hỏng",
+      "requiredPermission": "order_so:receive_confirm",
+      "actor": "Điểm bán (hoặc sales thay)",
+      "notes": "Tự tạo ticket/việc theo dõi gắn đơn (DMS↔CRM)."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "RECEIVED_ISSUE",
+      "toStatus": "CLOSED",
+      "action": "Xử lý giao bù / đổi trả xong",
+      "requiredPermission": "return:approve",
+      "actor": "NPP_OWNER",
+      "notes": "Kết quả lưu vào hồ sơ điểm bán."
+    },
+    {
+      "flowType": "SELL_OUT",
+      "fromStatus": "RECEIVED_FULL",
+      "toStatus": "CLOSED",
+      "action": "Đóng đơn",
+      "requiredPermission": "(hệ",
+      "actor": "SYSTEM",
+      "notes": "Tự động sau khi nhận đủ."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "DRAFT",
+      "toStatus": "SUBMITTED",
+      "action": "Gửi đơn nhập hàng",
+      "requiredPermission": "order_si:create",
+      "actor": "NPP",
+      "notes": "Kiểm hạn mức ngay khi gửi."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "SUBMITTED",
+      "toStatus": "HELD_CREDIT",
+      "action": "Giữ đơn do vượt hạn mức/nợ quá hạn",
+      "requiredPermission": "(hệ",
+      "actor": "SYSTEM",
+      "notes": "Tạo yêu cầu duyệt cho RSM/LDR (R07)."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "SUBMITTED",
+      "toStatus": "PENDING_APPROVAL",
+      "action": "Tiếp nhận & kiểm điều kiện",
+      "requiredPermission": "order_si:review",
+      "actor": "NSX_ORDER / ASM",
+      "notes": "Kiểm CTKM, tồn, công nợ."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "PENDING_APPROVAL",
+      "toStatus": "APPROVED",
+      "action": "Duyệt trong hạn mức",
+      "requiredPermission": "order_si:approve",
+      "actor": "ORD / ASM / RSM / LDR",
+      "notes": "Người duyệt ≠ người tạo (R04)."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "HELD_CREDIT",
+      "toStatus": "APPROVED",
+      "action": "Duyệt vượt hạn mức",
+      "requiredPermission": "order_si:approve_over_limit",
+      "actor": "RSM / LDR",
+      "notes": "Audit bắt buộc (R18)."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "PENDING_APPROVAL",
+      "toStatus": "REJECTED",
+      "action": "Từ chối",
+      "requiredPermission": "order_si:reject",
+      "actor": "ORD / ASM / RSM / LDR",
+      "notes": "Ghi lý do."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "HELD_CREDIT",
+      "toStatus": "REJECTED",
+      "action": "Từ chối",
+      "requiredPermission": "order_si:reject",
+      "actor": "ORD / ASM / RSM / LDR",
+      "notes": "Ghi lý do."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "PENDING_APPROVAL",
+      "toStatus": "NEED_INFO",
+      "action": "Yêu cầu bổ sung",
+      "requiredPermission": "order_si:reject",
+      "actor": "ORD / ASM / RSM / LDR",
+      "notes": "NPP bổ sung rồi gửi lại."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "DRAFT",
+      "toStatus": "CANCELLED",
+      "action": "Hủy khi chưa duyệt",
+      "requiredPermission": "order_si:cancel_draft",
+      "actor": "NPP",
+      "notes": "—"
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "SUBMITTED",
+      "toStatus": "CANCELLED",
+      "action": "Hủy khi chưa duyệt",
+      "requiredPermission": "order_si:cancel_draft",
+      "actor": "NPP",
+      "notes": "—"
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "APPROVED",
+      "toStatus": "SHIPPED",
+      "action": "Xuất kho & giao",
+      "requiredPermission": "order_si:ship",
+      "actor": "NSX_ORDER",
+      "notes": "Lưu lô, hạn sử dụng, số thực xuất."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "SHIPPED",
+      "toStatus": "RECEIVED",
+      "action": "NPP xác nhận thực nhận (đủ/thiếu/hỏng/hoàn)",
+      "requiredPermission": "order_si:receive_confirm",
+      "actor": "NPP",
+      "notes": "Quá hạn: nhắc & leo thang (R08)."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "RECEIVED",
+      "toStatus": "RECONCILED",
+      "action": "Khớp ba bên (đặt – xuất – nhận)",
+      "requiredPermission": "(hệ",
+      "actor": "SYSTEM / người xử lý ngoại lệ",
+      "notes": "Chạy đêm trước chốt ngày."
+    },
+    {
+      "flowType": "SELL_IN",
+      "fromStatus": "RECONCILED",
+      "toStatus": "PERIOD_CLOSED",
+      "action": "Chốt kỳ",
+      "requiredPermission": "period:close",
+      "actor": "NSX_ACCT",
+      "notes": "Sau đó chỉ sửa bằng phiếu điều chỉnh (R09)."
+    }
+  ]
+}

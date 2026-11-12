@@ -1,0 +1,178 @@
+{
+  "tenants": [
+    { "code": "SYNERA", "type": "PLATFORM", "name": "SYNERA" },
+    { "code": "SUOI_VIET", "type": "NSX", "name": "Suối Việt" },
+    { "code": "MINH_PHAT", "type": "NPP", "name": "Minh Phát" },
+    { "code": "AN_KHANG", "type": "NPP", "name": "An Khang" },
+    { "code": "TAP_HOA_LAN", "type": "OUTLET", "name": "Tạp hóa Lan" },
+    { "code": "QUAN_BINH", "type": "OUTLET", "name": "Quán Bình" },
+    { "code": "CAFE_24", "type": "OUTLET", "name": "Cafe 24" }
+  ],
+  "users": [
+    { "name": "Quản trị nền tảng", "email": "sys-admin@demo.synera.local", "tenant": "SYNERA", "role": "SYS_ADMIN" },
+    { "name": "Lê Quang", "email": "le.quang@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_RSM" },
+    { "name": "Trần Mỹ", "email": "tran.my@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_ASM" },
+    { "name": "Trần Hà", "email": "tran.ha@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_SALES" },
+    { "name": "Chị Mai", "email": "chi.mai@demo.synera.local", "tenant": "MINH_PHAT", "role": "NPP_OWNER" },
+    { "name": "Chị Lan", "email": "chi.lan@demo.synera.local", "tenant": "TAP_HOA_LAN", "role": "OUTLET_OWNER" },
+    { "name": "Lãnh đạo demo", "email": "nsx-leader@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_LEADER" },
+    { "name": "Giám sát demo", "email": "nsx-sup@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_SUP" },
+    { "name": "Quản trị dữ liệu demo", "email": "nsx-admin@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_ADMIN" },
+    { "name": "Tiếp nhận đơn demo", "email": "nsx-order@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_ORDER" },
+    { "name": "Ngọc Mai", "email": "nsx-cs@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_CS" },
+    { "name": "Trade marketing demo", "email": "nsx-trade@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_TRADE" },
+    { "name": "Thu Trang", "email": "nsx-accounting@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_ACCT" },
+    { "name": "Nhân viên đơn và kho", "email": "npp-staff@demo.synera.local", "tenant": "MINH_PHAT", "role": "NPP_STAFF" },
+    { "name": "Kế toán NPP", "email": "npp-accounting@demo.synera.local", "tenant": "MINH_PHAT", "role": "NPP_ACCT" },
+    { "name": "Nhân viên cửa hàng", "email": "outlet-staff@demo.synera.local", "tenant": "TAP_HOA_LAN", "role": "OUTLET_STAFF" },
+    { "name": "Đầu mối An Khang", "email": "an-khang-owner@demo.synera.local", "tenant": "AN_KHANG", "role": "NPP_OWNER" },
+    { "name": "Nguyễn An", "email": "nguyen.an@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_SALES" },
+    { "name": "Lê Phúc", "email": "le.phuc@demo.synera.local", "tenant": "SUOI_VIET", "role": "NSX_SALES" }
+  ],
+  "orgUnits": [
+    { "code": "MIEN_BAC", "name": "Miền Bắc", "type": "REGION", "parent": null, "path": "/MIEN_BAC" },
+    { "code": "HA_NOI", "name": "Hà Nội", "type": "AREA", "parent": "MIEN_BAC", "path": "/MIEN_BAC/HA_NOI" },
+    { "code": "HAI_PHONG", "name": "Hải Phòng", "type": "AREA", "parent": "MIEN_BAC", "path": "/MIEN_BAC/HAI_PHONG" },
+    { "code": "MIEN_TRUNG", "name": "Miền Trung", "type": "REGION", "parent": null, "path": "/MIEN_TRUNG" },
+    { "code": "DA_NANG", "name": "Đà Nẵng", "type": "AREA", "parent": "MIEN_TRUNG", "path": "/MIEN_TRUNG/DA_NANG" },
+    { "code": "NGHE_AN", "name": "Nghệ An", "type": "AREA", "parent": "MIEN_TRUNG", "path": "/MIEN_TRUNG/NGHE_AN" },
+    { "code": "MIEN_NAM", "name": "Miền Nam", "type": "REGION", "parent": null, "path": "/MIEN_NAM" },
+    { "code": "TP_HCM", "name": "TP.HCM", "type": "AREA", "parent": "MIEN_NAM", "path": "/MIEN_NAM/TP_HCM" },
+    { "code": "DONG_NAM_BO", "name": "ĐN-BP", "type": "AREA", "parent": "MIEN_NAM", "path": "/MIEN_NAM/DONG_NAM_BO" },
+    { "code": "MEKONG_1_2", "name": "Mekong 1–2", "type": "AREA", "parent": "MIEN_NAM", "path": "/MIEN_NAM/MEKONG_1_2" },
+    { "code": "QUAN_3", "name": "Tuyến Quận 3", "type": "TERRITORY", "parent": "TP_HCM", "path": "/MIEN_NAM/TP_HCM/QUAN_3" }
+  ],
+  "routes": [
+    { "code": "RS00301", "name": "Tuyến Quận 3", "orgUnit": "QUAN_3", "salesUser": "tran.ha@demo.synera.local", "region": "TP.HCM · Miền Nam", "outlets": 5, "visitsToday": 4 },
+    { "code": "RS00302", "name": "Tuyến Quận 1", "orgUnit": "TP_HCM", "salesUser": "nguyen.an@demo.synera.local", "region": "TP.HCM · Miền Nam", "outlets": 8, "visitsToday": 6 },
+    { "code": "RS00701", "name": "Tuyến Bình Thạnh", "orgUnit": "TP_HCM", "salesUser": "le.phuc@demo.synera.local", "region": "TP.HCM · Miền Nam", "outlets": 7, "visitsToday": 5 }
+  ],
+  "outlets": [
+    { "code": "OUT-LAN", "tenant": "TAP_HOA_LAN", "name": "Tạp hóa Lan", "address": "12 Nguyễn Đình Chiểu, Q.3", "contact": "chị Lan", "phone": "+84903123456", "route": "RS00301", "position": 1 },
+    { "code": "OUT-BINH", "tenant": "QUAN_BINH", "name": "Quán Bình", "address": "Q.3, TP.HCM", "contact": "Anh Bình", "phone": "+84903123457", "route": "RS00301", "position": 2 },
+    { "code": "OUT-CAFE24", "tenant": "CAFE_24", "name": "Cafe 24", "address": "Q.3, TP.HCM", "contact": "Quản lý Cafe 24", "phone": "+84903123458", "route": "RS00301", "position": 3 }
+  ],
+  "tenantRelations": [
+    { "nsx": "SUOI_VIET", "npp": "MINH_PHAT" },
+    { "nsx": "SUOI_VIET", "npp": "AN_KHANG" }
+  ],
+  "outletNpp": [
+    { "outlet": "TAP_HOA_LAN", "npp": "MINH_PHAT" },
+    { "outlet": "QUAN_BINH", "npp": "MINH_PHAT" },
+    { "outlet": "CAFE_24", "npp": "MINH_PHAT" }
+  ],
+  "products": [
+    { "sku": "NS500", "name": "Nước suối 500ml", "baseUnit": "CHAI", "caseUnits": 24, "sellInPrice": 86000, "sellOutPrice": 96000, "promotion": "PROMO-NS500", "stockCases": 36, "sales7dCases": 52 },
+    { "sku": "NS150", "name": "Nước suối 1.5L", "baseUnit": "CHAI", "caseUnits": 12, "sellInPrice": 112000, "sellOutPrice": 128000, "promotion": null, "stockCases": 8, "sales7dCases": 21 },
+    { "sku": "TX330", "name": "Trà xanh 330ml", "baseUnit": "CHAI", "caseUnits": 24, "sellInPrice": 142000, "sellOutPrice": 158000, "promotion": "PROMO-TX330", "stockCases": 14, "sales7dCases": 18 }
+  ],
+  "promotions": [
+    { "code": "PROMO-NS500", "name": "Mua 10 tặng 1 NS500", "sku": "NS500", "minCases": 10, "discountBasisPoints": null, "giftSku": "NS500", "giftCases": 1 },
+    { "code": "PROMO-TX330", "name": "Chiết khấu 3% từ 8 thùng TX330", "sku": "TX330", "minCases": 8, "discountBasisPoints": 300, "giftSku": null, "giftCases": null }
+  ],
+  "orders": [
+    {
+      "code": "SI-1182", "type": "SELL_IN", "tenant": "SUOI_VIET", "npp": "MINH_PHAT", "outlet": null,
+      "status": "PENDING_APPROVAL", "createdBy": "chi.mai@demo.synera.local", "createdAt": "2026-11-12T00:40:00Z",
+      "lines": [{ "sku": "NS500", "orderedCases": 40, "confirmedCases": 0, "shippedCases": 0, "receivedCases": 0, "isGift": false }]
+    },
+    {
+      "code": "SI-1174", "type": "SELL_IN", "tenant": "SUOI_VIET", "npp": "AN_KHANG", "outlet": null,
+      "status": "SHIPPED", "createdBy": "npp-staff@demo.synera.local", "createdAt": "2026-11-11T09:20:00Z",
+      "lines": [{ "sku": "NS500", "orderedCases": 24, "confirmedCases": 24, "shippedCases": 24, "receivedCases": 0, "isGift": false }]
+    },
+    {
+      "code": "SO-24081", "type": "SELL_OUT", "tenant": "MINH_PHAT", "npp": "MINH_PHAT", "outlet": "TAP_HOA_LAN",
+      "status": "SUBMITTED", "createdBy": "tran.ha@demo.synera.local", "createdAt": "2026-11-12T01:22:00Z",
+      "lines": [
+        { "sku": "NS500", "orderedCases": 10, "confirmedCases": 0, "shippedCases": 0, "receivedCases": 0, "isGift": false },
+        { "sku": "TX330", "orderedCases": 2, "confirmedCases": 0, "shippedCases": 0, "receivedCases": 0, "isGift": false },
+        { "sku": "NS500", "orderedCases": 1, "confirmedCases": 0, "shippedCases": 0, "receivedCases": 0, "isGift": true }
+      ]
+    },
+    {
+      "code": "SO-24076", "type": "SELL_OUT", "tenant": "MINH_PHAT", "npp": "MINH_PHAT", "outlet": "QUAN_BINH",
+      "status": "RECEIVED_ISSUE", "createdBy": "tran.ha@demo.synera.local", "createdAt": "2026-11-11T07:05:00Z",
+      "lines": [{ "sku": "NS150", "orderedCases": 9, "confirmedCases": 7, "shippedCases": 7, "receivedCases": 7, "isGift": false }]
+    }
+  ],
+  "tickets": [
+    { "code": "TK-331", "title": "Giao thiếu 2 thùng NS150", "description": "SO-24076 · NPP hẹn giao bù 13/11/2026.", "tenant": "MINH_PHAT", "outlet": "QUAN_BINH", "order": "SO-24076", "assignee": "tran.ha@demo.synera.local", "status": "IN_PROGRESS", "dueAt": "2026-11-13T00:00:00Z" },
+    { "code": "TK-328", "title": "Xin POSM kệ nước suối", "description": "Đề xuất POSM cho tuyến Quận 3.", "tenant": "SUOI_VIET", "outlet": null, "order": null, "assignee": "nsx-trade@demo.synera.local", "status": "NEW", "dueAt": "2026-11-13T00:00:00Z" }
+  ],
+  "visits": [
+    { "outlet": "TAP_HOA_LAN", "route": "RS00301", "sales": "tran.ha@demo.synera.local", "status": "COMPLETED", "plannedAt": "2026-11-12T01:30:00Z", "checkInAt": "2026-11-12T01:15:00Z", "checkOutAt": "2026-11-12T01:45:00Z" },
+    { "outlet": "QUAN_BINH", "route": "RS00301", "sales": "tran.ha@demo.synera.local", "status": "PLANNED", "plannedAt": "2026-11-12T03:30:00Z", "checkInAt": null, "checkOutAt": null },
+    { "outlet": "CAFE_24", "route": "RS00301", "sales": "tran.ha@demo.synera.local", "status": "PLANNED", "plannedAt": "2026-11-12T05:00:00Z", "checkInAt": null, "checkOutAt": null }
+  ],
+  "appointments": [
+    { "code": "AP-01", "outlet": "TAP_HOA_LAN", "title": "Báo lại CTKM trà xanh nếu còn hiệu lực", "dueAt": "2026-11-12T03:30:00Z", "assignee": "tran.ha@demo.synera.local", "status": "OPEN" },
+    { "code": "AP-02", "outlet": "QUAN_BINH", "title": "Theo dõi giao bù 2 thùng NS150", "dueAt": "2026-11-12T06:00:00Z", "assignee": "tran.ha@demo.synera.local", "status": "OPEN" }
+  ],
+  "dailySellOut30d": [18, 22, 20, 25, 27, 24, 21, 28, 31, 26, 29, 33, 30, 25, 32, 35, 29, 31, 36, 34, 30, 38, 35, 33, 40, 37, 34, 42, 39, 41],
+  "dailySellIn30d": [25, 28, 22, 32, 29, 34, 27, 31, 38, 33, 36, 30, 41, 35, 39, 32, 43, 37, 40, 34, 45, 39, 42, 36, 47, 41, 44, 38, 49, 43],
+  "dashboard": {
+    "sellInWaiting": 1,
+    "mcpVisited": 4,
+    "mcpTotal": 5,
+    "openTickets": 2,
+    "sellOutWeek": 91,
+    "sellOutSettled": 86,
+    "sellInTarget": 420,
+    "sellInTargetTotal": 800,
+    "quarterDiscount": "2,5%",
+    "creditTracked": 186000000,
+    "creditRemainingCases": 120,
+    "priceValidThrough": "2026-11-30",
+    "operationalUpdatedAt": "2026-11-12T02:42:00Z",
+    "settledThrough": "2026-11-11"
+  },
+  "featureFlags": { "aiSuggestionsEnabled": false },
+  "demandPlan": [
+    { "sku": "NS500", "quantityCases": 68, "plannedFor": "2026-11-16" },
+    { "sku": "NS150", "quantityCases": 34, "plannedFor": "2026-11-16" },
+    { "sku": "TX330", "quantityCases": 22, "plannedFor": "2026-11-16" }
+  ],
+  "financeRows": [
+    { "npp": "MINH_PHAT", "debtVnd": 186000000, "remainingCases": 120, "status": "WATCH" },
+    { "npp": "AN_KHANG", "debtVnd": null, "remainingCases": null, "status": "NO_DATA" }
+  ],
+  "closeSchedule": [
+    { "type": "DAY", "start": "2026-11-12", "end": "2026-11-12", "next": "2026-11-13T02:00:00Z" },
+    { "type": "WEEK", "start": "2026-11-09", "end": "2026-11-15", "next": "2026-11-16T02:00:00Z" },
+    { "type": "MONTH", "start": "2026-11-01", "end": "2026-11-30", "next": "2026-12-01T02:00:00Z" },
+    { "type": "QUARTER", "start": "2026-10-01", "end": "2026-12-31", "next": "2027-01-01T02:00:00Z" }
+  ],
+  "actionLog": [
+    { "actor": "tran.my@demo.synera.local", "action": "VIEW_ORDER", "resourceType": "order_si", "resourceCode": "SI-1182", "occurredAt": "2026-11-12T01:42:00Z" },
+    { "actor": "tran.ha@demo.synera.local", "action": "CREATE_ORDER", "resourceType": "order_so", "resourceCode": "SO-24081", "occurredAt": "2026-11-12T01:22:00Z" },
+    { "actor": "tran.ha@demo.synera.local", "action": "CHECK_IN", "resourceType": "visit", "resourceCode": "TAP_HOA_LAN", "occurredAt": "2026-11-12T01:15:00Z" }
+  ],
+  "salesRegions": [
+    { "name": "Miền Bắc", "regions": [
+      { "name": "Hà Nội", "owner": "Nguyễn Hải", "sales": 12, "outlets": 1840, "territories": ["VBH HN 01", "VBH HN 02"] },
+      { "name": "Hải Phòng", "owner": "Phạm Hương", "sales": 6, "outlets": 720, "territories": ["VBH HP 01"] }
+    ] },
+    { "name": "Miền Trung", "regions": [
+      { "name": "Đà Nẵng", "owner": "Vũ Minh", "sales": 7, "outlets": 910, "territories": ["VBH ĐN 01"] },
+      { "name": "Nghệ An", "owner": "Lê Phương", "sales": 5, "outlets": 630, "territories": ["VBH NA 01"] }
+    ] },
+    { "name": "Miền Nam", "regions": [
+      { "name": "TP.HCM", "owner": "Trần Mỹ", "sales": 18, "outlets": 2460, "territories": ["VBH HCM 01", "VBH HCM 02"] },
+      { "name": "ĐN-BP", "owner": "Phan Đức", "sales": 8, "outlets": 980, "territories": ["VBH ĐNBP 01"] },
+      { "name": "Mekong 1–2", "owner": "Trần Vũ", "sales": 11, "outlets": 1370, "territories": ["VBH MK 01", "VBH MK 02"] }
+    ] }
+  ],
+  "salesRoute": [
+    { "outlet": "Tạp hóa Lan", "time": "08:30" },
+    { "outlet": "Quán Bình", "time": "10:30" },
+    { "outlet": "Cafe 24", "time": "12:00" }
+  ],
+  "userDirectory": [
+    { "name": "Lê Quang", "role": "RSM Miền Nam", "scope": "Miền Nam", "status": "Đang hoạt động" },
+    { "name": "Trần Mỹ", "role": "ASM TP.HCM", "scope": "TP.HCM", "status": "Đang hoạt động" },
+    { "name": "Trần Hà", "role": "Sales", "scope": "Tuyến Quận 3", "status": "Đang hoạt động" },
+    { "name": "Ngọc Mai", "role": "CSKH", "scope": "Toàn quốc", "status": "Đang hoạt động" },
+    { "name": "Thu Trang", "role": "Kế toán", "scope": "Toàn quốc", "status": "Đang hoạt động" }
+  ]
+}
