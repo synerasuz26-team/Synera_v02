@@ -3596,7 +3596,7 @@
       "fromStatus": "RECEIVED_FULL",
       "toStatus": "CLOSED",
       "action": "Đóng đơn",
-      "requiredPermission": "(hệ",
+      "requiredPermission": "SYSTEM",
       "actor": "SYSTEM",
       "notes": "Tự động sau khi nhận đủ."
     },
@@ -3614,7 +3614,7 @@
       "fromStatus": "SUBMITTED",
       "toStatus": "HELD_CREDIT",
       "action": "Giữ đơn do vượt hạn mức/nợ quá hạn",
-      "requiredPermission": "(hệ",
+      "requiredPermission": "SYSTEM",
       "actor": "SYSTEM",
       "notes": "Tạo yêu cầu duyệt cho RSM/LDR (R07)."
     },
@@ -3713,7 +3713,7 @@
       "fromStatus": "RECEIVED",
       "toStatus": "RECONCILED",
       "action": "Khớp ba bên (đặt – xuất – nhận)",
-      "requiredPermission": "(hệ",
+      "requiredPermission": "SYSTEM",
       "actor": "SYSTEM / người xử lý ngoại lệ",
       "notes": "Chạy đêm trước chốt ngày."
     },
