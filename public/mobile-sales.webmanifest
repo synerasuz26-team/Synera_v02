@@ -1,0 +1,19 @@
+{
+  "name": "SYNERA Sales · Tuyến Quận 3",
+  "short_name": "SYNERA Sales",
+  "description": "Hồ sơ điểm bán, lượt ghé và đơn sell-out cho nhân viên thị trường.",
+  "start_url": "/#/sales",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f7fb",
+  "theme_color": "#2f5bea",
+  "icons": [
+    {
+      "src": "/mobile-sales-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -15,4 +15,17 @@
   --danger: #b42318;
   --radius: 5px;
   --font-ui: 'Segoe UI', Arial, sans-serif;
+
+  --synera-canvas: #f6f8fb;
+  --synera-surface: #ffffff;
+  --synera-border: #e4e8ef;
+  --synera-text: #0f1f3d;
+  --synera-muted: #5b6b84;
+  --synera-primary: #2f5bea;
+  --synera-nav: #0f1f3d;
+  --synera-sell-in: #2f5bea;
+  --synera-sell-out: #12a594;
+  --synera-warning: #f5a524;
+  --synera-danger: #e5484d;
+  --synera-success: #30a46c;
 }

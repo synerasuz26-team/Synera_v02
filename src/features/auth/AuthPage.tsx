@@ -1,14 +1,16 @@
 import { useState, type FormEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { Brand } from '../../shared/Brand';
-import { loginAccount } from './authApi';
+import { getCurrentUser, loginAccount } from './authApi';
+import { homeFor } from '../../../packages/api/client';
 
 type AuthPageProps = {
   mode: 'login' | 'register';
 };
 
 export default function AuthPage({ mode }: AuthPageProps) {
+  const navigate = useNavigate();
   const isRegister = mode === 'register';
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -29,7 +31,8 @@ export default function AuthPage({ mode }: AuthPageProps) {
     setIsSubmitting(true);
     try {
       await loginAccount(email, password);
-      setMessage('Đăng nhập thành công.');
+      const me = await getCurrentUser();
+      navigate(homeFor(me), { replace: true });
     } catch (requestError) {
       setError(
         requestError instanceof Error

@@ -18,23 +18,18 @@ afterEach(() => {
 
 describe('auth API', () => {
   it('sends login to the versioned stateless API and retains the access token', async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce(Response.json({ token: 'csrf-token' }))
-      .mockResolvedValueOnce(Response.json(authResponse));
+    const fetchMock = vi.fn().mockResolvedValueOnce(Response.json(authResponse));
     vi.stubGlobal('fetch', fetchMock);
 
     await loginAccount('person@example.com', 'secure-password');
 
-    expect(fetchMock).toHaveBeenNthCalledWith(1, 'http://127.0.0.1:8080/api/v1/auth/csrf');
     expect(fetchMock).toHaveBeenNthCalledWith(
-      2,
+      1,
       'http://127.0.0.1:8080/api/v1/auth/login',
       expect.objectContaining({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-XSRF-TOKEN': 'csrf-token',
         },
         body: JSON.stringify({ email: 'person@example.com', password: 'secure-password' }),
       }),
@@ -43,17 +38,14 @@ describe('auth API', () => {
   });
 
   it('shows the API error message when login is rejected', async () => {
-    const fetchMock = vi
-      .fn()
-      .mockResolvedValueOnce(Response.json({ token: 'csrf-token' }))
-      .mockResolvedValueOnce(
-        Response.json(
-          { code: 'INVALID_CREDENTIALS', message: 'Email hoặc mật khẩu không đúng.' },
-          {
-            status: 401,
-          },
-        ),
-      );
+    const fetchMock = vi.fn().mockResolvedValueOnce(
+      Response.json(
+        { code: 'INVALID_CREDENTIALS', message: 'Email hoặc mật khẩu không đúng.' },
+        {
+          status: 401,
+        },
+      ),
+    );
     vi.stubGlobal('fetch', fetchMock);
 
     await expect(loginAccount('person@example.com', 'wrong-password')).rejects.toThrow(
