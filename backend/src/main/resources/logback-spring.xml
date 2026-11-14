@@ -1,0 +1,8 @@
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="com.synera.api.config.SafeJsonLogLayout"/>
+        </encoder>
+    </appender>
+    <root level="${LOGGING_LEVEL_ROOT:-INFO}"><appender-ref ref="CONSOLE"/></root>
+</configuration>

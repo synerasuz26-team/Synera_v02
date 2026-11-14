@@ -10,3 +10,8 @@ _extract
 !.env.example
 backend/target/
 backend/target-ide/
+outputs/p5-import-templates/
+backups/
+synera-backups/
+synera-*.sql.gz
+synera-*.manifest.json

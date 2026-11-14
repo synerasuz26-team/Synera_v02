@@ -86,7 +86,7 @@ public class RefreshTokenService {
         jdbc.update("""
                 UPDATE refresh_token SET revoked_at = ?, replaced_by = ?
                 WHERE id = ? AND revoked_at IS NULL
-                """, Instant.now(clock), replacementId, current.id());
+                """, java.time.OffsetDateTime.ofInstant(clock.instant(), java.time.ZoneOffset.UTC), replacementId, current.id());
         AccessTokenService.Token accessToken = accessTokens.issue(identity, current.deviceId());
         return new AuthSession(identity, accessToken.value(), replacement, current.deviceId(),
                 accessToken.expiresIn());
@@ -99,11 +99,13 @@ public class RefreshTokenService {
                     SELECT family_id FROM refresh_token WHERE token_hash = ? FOR UPDATE
                     """, (rs, row) -> rs.getObject(1, UUID.class), hash(rawToken));
             if (!families.isEmpty()) {
+                jdbc.update("UPDATE push_device SET active=false,updated_at=CURRENT_TIMESTAMP WHERE (user_id,device_id) IN(SELECT user_id,device_id FROM refresh_token WHERE family_id=?)",families.get(0));
                 revokeFamily(families.get(0));
                 return;
             }
         }
         if (userId != null && deviceId != null && !deviceId.isBlank()) {
+            jdbc.update("UPDATE push_device SET active=false,updated_at=CURRENT_TIMESTAMP WHERE user_id=? AND device_id=?",userId,deviceId);
             jdbc.update("""
                     UPDATE refresh_token SET revoked_at = COALESCE(revoked_at, CURRENT_TIMESTAMP)
                     WHERE user_id = ? AND device_id = ?
@@ -124,7 +126,7 @@ public class RefreshTokenService {
                     id, tenant_id, user_id, token_hash, expires_at, family_id, device_id, rotated_from
                 ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """, id, identity.tenantId(), identity.id(), hash(rawToken),
-                clock.instant().plus(lifetime), familyId, deviceId, rotatedFrom);
+                java.time.OffsetDateTime.ofInstant(clock.instant().plus(lifetime), java.time.ZoneOffset.UTC), familyId, deviceId, rotatedFrom);
     }
 
     private void revokeFamily(UUID familyId) {

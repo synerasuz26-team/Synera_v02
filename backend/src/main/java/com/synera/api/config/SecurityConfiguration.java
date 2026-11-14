@@ -4,6 +4,7 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.synera.api.auth.MigratingPasswordEncoder;
 import com.synera.api.security.JsonAccessDeniedHandler;
 import com.synera.api.security.JsonAuthenticationEntryPoint;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,7 @@ import java.util.Map;
 
 @Configuration
 public class SecurityConfiguration {
+    @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
     @Bean
     SecurityFilterChain securityFilterChain(
             HttpSecurity http,
@@ -53,7 +55,7 @@ public class SecurityConfiguration {
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/actuator/health", "/api/auth/csrf", "/api/v1/auth/csrf").permitAll()
+                        .requestMatchers("/health", "/actuator/health", "/api/auth/csrf", "/api/v1/auth/csrf").permitAll()
                         .requestMatchers("/api/v1/openapi", "/api/v1/openapi/**",
                                 "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
@@ -127,7 +129,8 @@ public class SecurityConfiguration {
                 .filter(origin -> !origin.isEmpty())
                 .toList());
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-XSRF-TOKEN", "X-Device-Id"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-XSRF-TOKEN", "X-Device-Id", "Idempotency-Key", "X-Request-Id"));
+        configuration.setExposedHeaders(List.of("X-Request-Id", "Retry-After"));
         configuration.setAllowCredentials(false);
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", configuration);

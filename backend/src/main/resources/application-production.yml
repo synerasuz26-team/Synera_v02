@@ -1,0 +1,43 @@
+server:
+  forward-headers-strategy: native
+  tomcat:
+    threads:
+      max: 16
+      min-spare: 2
+    max-connections: 64
+    accept-count: 16
+    max-http-form-post-size: 6MB
+    max-swallow-size: 6MB
+spring:
+  main:
+    lazy-initialization: true
+    banner-mode: "off"
+  datasource:
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:3}
+      minimum-idle: 1
+      connection-timeout: 10000
+  jpa:
+    show-sql: false
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+logging:
+  level:
+    org.springframework.web: ERROR
+    org.springframework.jdbc: WARN
+    org.hibernate.SQL: OFF
+    org.hibernate.orm.jdbc.bind: OFF
+app:
+  files:
+    photos-enabled: ${FEATURE_PHOTOS:false}
+  http:
+    require-https: true
+    login-per-minute: ${HTTP_LOGIN_PER_MINUTE:10}
+    writes-per-minute: ${HTTP_WRITES_PER_MINUTE:120}
+  operations:
+    enabled: true
+    database-warning-bytes: ${DB_WARNING_BYTES:350000000}
+    database-critical-bytes: ${DB_CRITICAL_BYTES:425000000}

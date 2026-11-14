@@ -1,0 +1,29 @@
+{
+    auto_https off
+    admin off
+    persist_config off
+}
+:{$PORT:8080} {
+    root * /srv
+    encode gzip
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy no-referrer
+        Strict-Transport-Security "max-age=31536000"
+        Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' {$API_ORIGIN} {$STORAGE_ORIGIN}; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+        -Server
+    }
+    @http {
+        header X-Forwarded-Proto http
+        not path /health
+    }
+    respond @http "HTTPS required" 426
+    respond /health "OK" 200
+    @assets path /assets/*
+    header @assets Cache-Control "public, max-age=31536000, immutable"
+    @entry path / /index.html /mobile-sales-sw.js /mobile-sales.webmanifest
+    header @entry Cache-Control "no-cache"
+    try_files {path} /index.html
+    file_server
+}
