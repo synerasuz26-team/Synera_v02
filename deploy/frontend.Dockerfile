@@ -1,7 +1,7 @@
 FROM node:24-bookworm-slim AS build
 WORKDIR /workspace
 RUN corepack enable
-COPY package.json pnpm-lock.yaml ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 RUN corepack pnpm install --frozen-lockfile
 COPY . .
 ARG VITE_API_URL
