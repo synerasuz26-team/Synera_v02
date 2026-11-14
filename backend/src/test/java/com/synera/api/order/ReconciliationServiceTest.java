@@ -52,10 +52,10 @@ class ReconciliationServiceTest {
     void reportsOnlyDifferencesGreaterThanFivePercent() {
         ReconciliationService.ReportRow atThreshold = service.reportRow(
                 UUID.randomUUID(), "NPP", 0, 0, 105, 0, 0, 0,
-                OffsetDateTime.now(ZoneOffset.UTC), 100L);
+                OffsetDateTime.now(ZoneOffset.UTC), 100L,java.math.BigDecimal.valueOf(5));
         ReconciliationService.ReportRow aboveThreshold = service.reportRow(
                 UUID.randomUUID(), "NPP", 0, 0, 106, 0, 0, 0,
-                OffsetDateTime.now(ZoneOffset.UTC), 100L);
+                OffsetDateTime.now(ZoneOffset.UTC), 100L,java.math.BigDecimal.valueOf(5));
 
         assertEquals("5.00", atThreshold.variancePercent().toPlainString());
         assertFalse(atThreshold.warningOverFivePercent());

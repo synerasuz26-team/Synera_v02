@@ -15,6 +15,17 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class ApiExceptionHandler {
+    @ExceptionHandler(org.springframework.dao.ConcurrencyFailureException.class)
+    public ResponseEntity<ApiError> concurrentWrite() {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(new ApiError("CONCURRENT_WRITE", "Dữ liệu đang được cập nhật đồng thời. Hãy tải lại và thử lại thao tác; lô chưa hoàn tất sẽ được hoàn tác."));
+    }
+    @ExceptionHandler(org.springframework.dao.DataAccessException.class)
+    public ResponseEntity<ApiError> databaseFailure(org.springframework.dao.DataAccessException exception) {
+        org.slf4j.LoggerFactory.getLogger(ApiExceptionHandler.class).error("database_failure type={}",exception.getClass().getSimpleName());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new ApiError("DATABASE_ERROR", "Không thể xử lý dữ liệu lúc này. Vui lòng thử lại hoặc liên hệ quản trị viên."));
+    }
     @ExceptionHandler(ApiProblem.class)
     public ResponseEntity<ApiError> apiProblem(ApiProblem problem) {
         return ResponseEntity.status(problem.status())

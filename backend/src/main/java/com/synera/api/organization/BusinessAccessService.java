@@ -140,7 +140,7 @@ public class BusinessAccessService {
         Boolean allowed = jdbc.queryForObject("""
                 SELECT EXISTS (
                     SELECT 1 FROM visit v
-                    WHERE v.id = ? AND v.deleted_at IS NULL AND """ + filter.sql() + """
+                    WHERE v.id = ? AND v.deleted_at IS NULL AND """ + " " + filter.sql() + " " + """
                 )
                 """, Boolean.class, prepend(visitId, filter.arguments()).toArray());
         requireAllowed(allowed);

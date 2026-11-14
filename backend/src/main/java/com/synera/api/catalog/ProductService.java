@@ -50,7 +50,7 @@ public class ProductService {
         List<ProductSummary> rows = jdbc.query("""
                 SELECT p.id, p.sku, p.name, p.base_unit_code, p.status, p.version
                 FROM product p
-                WHERE """ + where + """
+                WHERE """ + " " + where + " " + """
                 ORDER BY p.sku
                 LIMIT ? OFFSET ?
                 """, productSummaryMapper(), arguments.toArray());
@@ -62,7 +62,7 @@ public class ProductService {
         ProductSummary product = jdbc.query("""
                 SELECT p.id, p.sku, p.name, p.base_unit_code, p.status, p.version
                 FROM product p
-                WHERE p.id = ? AND """ + access.productVisibility(actor),
+                WHERE p.id = ? AND """ + " " + access.productVisibility(actor),
                 productSummaryMapper(), prependProductId(productId, access.productVisibilityArguments(actor)))
                 .stream().findFirst()
                 .orElseThrow(() -> new ApiProblem("PRODUCT_NOT_FOUND", "Không tìm thấy sản phẩm.",

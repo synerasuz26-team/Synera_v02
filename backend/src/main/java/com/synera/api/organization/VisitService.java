@@ -75,7 +75,7 @@ public class VisitService {
                 JOIN outlet o ON o.id = v.outlet_id
                 JOIN app_users u ON u.id = v.sales_user_id
                 WHERE v.deleted_at IS NULL AND
-                """ + where + """
+                """ + where + " " + """
                 ORDER BY v.planned_at NULLS LAST, o.name LIMIT ? OFFSET ?
                 """, this::mapVisit, arguments.toArray());
         return ApiPage.of(rows, page, size, total);
@@ -282,7 +282,7 @@ public class VisitService {
                 FROM visit_gps_exception g
                 JOIN visit v ON v.id = g.visit_id AND v.tenant_id = g.tenant_id
                 JOIN outlet o ON o.id = v.outlet_id
-                WHERE """ + where + """
+                WHERE """ + " " + where + " " + """
                 ORDER BY g.created_at LIMIT ? OFFSET ?
                 """, (rs, row) -> new GpsExceptionSummary(
                 rs.getObject("id", UUID.class), rs.getObject("visit_id", UUID.class),

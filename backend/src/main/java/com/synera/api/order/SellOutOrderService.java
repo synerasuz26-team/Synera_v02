@@ -39,7 +39,6 @@ public class SellOutOrderService {
     private final EffectivePricingService pricing;
     private final OrderFlowService orderFlow;
     private final AuditService audit;
-    private final int confirmationWindowHours;
 
     public SellOutOrderService(
             JdbcTemplate jdbc,
@@ -47,15 +46,13 @@ public class SellOutOrderService {
             PartnerAccessService partnerAccess,
             EffectivePricingService pricing,
             OrderFlowService orderFlow,
-            AuditService audit,
-            @Value("${synera.orders.confirmation-window-hours:4}") int confirmationWindowHours) {
+            AuditService audit) {
         this.jdbc = jdbc;
         this.access = access;
         this.partnerAccess = partnerAccess;
         this.pricing = pricing;
         this.orderFlow = orderFlow;
         this.audit = audit;
-        this.confirmationWindowHours = confirmationWindowHours;
     }
 
     public ApiPage<OrderSummary> list(
@@ -160,7 +157,7 @@ public class SellOutOrderService {
             jdbc.update("""
                     UPDATE order_so SET submitted_at = CURRENT_TIMESTAMP, confirmation_due_at = ?
                     WHERE id = ? AND tenant_id = ? AND version = ?
-                    """, OffsetDateTime.now(ZoneOffset.UTC).plusHours(confirmationWindowHours),
+                    """, OffsetDateTime.now(ZoneOffset.UTC).plusMinutes(com.synera.api.operations.RuntimeSettings.number(jdbc,nppId,"confirmation_minutes")),
                     orderId, nppId, version);
         }
         OrderDetail created = loadById(orderId);
@@ -233,7 +230,7 @@ public class SellOutOrderService {
         jdbc.update("""
                 UPDATE order_so SET submitted_at = CURRENT_TIMESTAMP, confirmation_due_at = ?
                 WHERE id = ? AND tenant_id = ? AND version = ?
-                """, OffsetDateTime.now(ZoneOffset.UTC).plusHours(confirmationWindowHours),
+                """, OffsetDateTime.now(ZoneOffset.UTC).plusMinutes(com.synera.api.operations.RuntimeSettings.number(jdbc,order.tenantId(),"confirmation_minutes")),
                 orderId, order.tenantId(), version);
         OrderDetail submitted = loadById(orderId);
         audit.recordIfSensitive(actor.tenantId(), actor.userId(), "order_so:create",
@@ -373,10 +370,10 @@ public class SellOutOrderService {
         }
         List<OrderLineState> lines = orderLines(order.id());
         Map<UUID, ReceiptLineInput> received = validateReceipt(lines, request.lines());
-        validateAttachments(actor, request.attachmentIds());
+        validateAttachments(actor, order.id(), request.attachmentIds());
         boolean full = lines.stream().allMatch(line -> {
             ReceiptLineInput receipt = received.get(line.id());
-            return receipt.receivedQty() == line.shippedQty() && receipt.damagedQty() == 0;
+            return receipt.receivedQty() == line.confirmedQty() && receipt.damagedQty() == 0;
         });
         for (OrderLineState line : lines) {
             ReceiptLineInput receipt = received.get(line.id());
@@ -435,7 +432,8 @@ public class SellOutOrderService {
                     "Đơn đã có yêu cầu đổi trả đang chờ xử lý.", HttpStatus.CONFLICT);
         }
         List<OrderLineState> lines = orderLines(order.id());
-        Map<UUID, Long> quantities = validateReturnLines(lines, request.lines());
+        boolean replacement="REPLACEMENT".equals(request.requestType());
+        Map<UUID, Long> quantities = validateReturnLines(lines, request.lines(),replacement);
         Map<UUID, Long> receivedByLine = new HashMap<>();
         lines.forEach(line -> receivedByLine.put(line.id(), line.receivedQty()));
         for (Map.Entry<UUID, Long> entry : quantities.entrySet()) {
@@ -446,8 +444,13 @@ public class SellOutOrderService {
                     WHERE rr.order_so_id = ? AND rrl.order_line_id = ?
                       AND rr.deleted_at IS NULL AND rr.status IN ('SUBMITTED', 'APPROVED')
                     """, Long.class, order.id(), entry.getKey());
-            if (alreadyRequested == null || entry.getValue() + alreadyRequested
-                    > receivedByLine.get(entry.getKey())) {
+            long maximum=receivedByLine.get(entry.getKey());
+            if(replacement){
+                long initialGood=jdbc.queryForObject("SELECT COALESCE(SUM(received_qty-damaged_qty),0) FROM order_receipt_line WHERE order_so_id=? AND order_line_id=?",Long.class,order.id(),entry.getKey());
+                maximum=lines.stream().filter(line->line.id().equals(entry.getKey())).findFirst().orElseThrow().confirmedQty()-initialGood;
+                alreadyRequested=jdbc.queryForObject("SELECT COALESCE(SUM(l.quantity),0) FROM return_request_line l JOIN return_request r ON r.id=l.return_request_id WHERE r.order_so_id=? AND l.order_line_id=? AND r.request_type='REPLACEMENT' AND r.status IN('SUBMITTED','APPROVED') AND r.deleted_at IS NULL",Long.class,order.id(),entry.getKey());
+            }
+            if (alreadyRequested == null || entry.getValue() + alreadyRequested > maximum) {
                 throw new ApiProblem("RETURN_QUANTITY_EXCEEDED",
                         "Tổng số lượng đổi trả vượt số hàng đã nhận.",
                         HttpStatus.CONFLICT, Map.of("orderLineId", entry.getKey().toString()));
@@ -524,7 +527,11 @@ public class SellOutOrderService {
         }
         if (request.approved()) {
             OrderHeader order = requireOrder(jwt, actor, "return:approve", row.orderSoId(), true);
-            orderFlow.transition("SELL_OUT", order.tenantId(), order.id(), "RECEIVED_ISSUE", "CLOSED",
+            String requestType=jdbc.queryForObject("SELECT request_type FROM return_request WHERE id=?",String.class,returnId);
+            if("REPLACEMENT".equals(requestType)){
+                if(order.version()!=request.orderVersion())throw new ApiProblem("ORDER_VERSION_CONFLICT","Đơn đã thay đổi.",HttpStatus.CONFLICT);
+                jdbc.update("INSERT INTO replacement_delivery(return_request_id,tenant_id) VALUES(?,?)",returnId,order.tenantId());
+            }else orderFlow.transition("SELL_OUT", order.tenantId(), order.id(), "RECEIVED_ISSUE", "CLOSED",
                     "return:approve", actor.userId(), request.resolution(), request.orderVersion());
         }
         audit.recordIfSensitive(actor.tenantId(), actor.userId(), "return:approve",
@@ -597,14 +604,14 @@ public class SellOutOrderService {
     }
 
     private Map<UUID, Long> validateReturnLines(
-            List<OrderLineState> orderLines, List<ReturnLineInput> requested) {
+            List<OrderLineState> orderLines, List<ReturnLineInput> requested,boolean replacement) {
         Map<UUID, OrderLineState> byId = new HashMap<>();
         orderLines.forEach(line -> byId.put(line.id(), line));
         Map<UUID, Long> quantities = new HashMap<>();
         for (ReturnLineInput item : requested) {
             OrderLineState line = byId.get(item.orderLineId());
             if (line == null || quantities.containsKey(item.orderLineId())
-                    || item.quantity() <= 0 || item.quantity() > line.receivedQty()) {
+                    || item.quantity() <= 0 || item.quantity() > (replacement?line.confirmedQty():line.receivedQty())) {
                 throw new ApiProblem("INVALID_RETURN_QUANTITY",
                         "Số lượng đổi trả phải thuộc đơn và không vượt số lượng đã nhận.",
                         HttpStatus.BAD_REQUEST, Map.of("orderLineId", item.orderLineId().toString()));
@@ -618,7 +625,7 @@ public class SellOutOrderService {
         return quantities;
     }
 
-    private void validateAttachments(BusinessAccessService.Actor actor, List<UUID> attachmentIds) {
+    private void validateAttachments(BusinessAccessService.Actor actor, UUID orderId,List<UUID> attachmentIds) {
         if (attachmentIds.size() > 5 || new HashSet<>(attachmentIds).size() != attachmentIds.size()) {
             throw new ApiProblem("INVALID_RECEIPT_ATTACHMENTS",
                     "Có thể đính kèm tối đa 5 ảnh, không lặp tệp.", HttpStatus.BAD_REQUEST);
@@ -630,11 +637,12 @@ public class SellOutOrderService {
         List<Object> arguments = new ArrayList<>();
         arguments.add(actor.tenantId());
         arguments.add(actor.userId());
+        arguments.add(orderId);
         arguments.addAll(attachmentIds);
         Integer count = jdbc.queryForObject("""
                 SELECT COUNT(*) FROM attachment
-                WHERE tenant_id = ? AND uploaded_by = ? AND id IN (
-                """ + placeholders + ")", Integer.class, arguments.toArray());
+                WHERE tenant_id = ? AND uploaded_by = ? AND owner_type='ORDER_SO' AND owner_id=? AND id IN (
+                """ + placeholders + ") AND upload_status='READY'", Integer.class, arguments.toArray());
         if (count == null || count != attachmentIds.size()) {
             throw new ApiProblem("RECEIPT_ATTACHMENT_NOT_FOUND",
                     "Một hoặc nhiều ảnh không tồn tại hoặc không thuộc tài khoản hiện tại.",
@@ -658,18 +666,18 @@ public class SellOutOrderService {
         jdbc.update("""
                 INSERT INTO ticket (
                     id, tenant_id, ticket_code, title, description, status, priority,
-                    outlet_id, order_so_id, created_by
-                ) VALUES (?, ?, ?, ?, ?, 'NEW', 'HIGH', ?, ?, ?)
+                    outlet_id, order_so_id, created_by,receipt_issue
+                ) VALUES (?, ?, ?, ?, ?, 'NEW', 'HIGH', ?, ?, ?,true)
                 """, ticketId, order.tenantId(), "SO-ISSUE-" + suffix,
                 "Thiếu hoặc hỏng hàng - " + order.orderCode(), description,
                 order.outletId(), order.id(), actor.userId());
         jdbc.update("""
                 INSERT INTO task (
-                    id, tenant_id, title, description, status, outlet_id, created_by, due_at
-                ) VALUES (?, ?, ?, ?, 'OPEN', ?, ?, ?)
+                    id, tenant_id, title, description, status, outlet_id, created_by, due_at,order_so_id
+                ) VALUES (?, ?, ?, ?, 'OPEN', ?, ?, ?,?)
                 """, UUID.randomUUID(), order.tenantId(), "Theo dõi xử lý đơn " + order.orderCode(),
                 description, order.outletId(), actor.userId(),
-                OffsetDateTime.now(ZoneOffset.UTC).plusHours(24));
+                OffsetDateTime.now(ZoneOffset.UTC).plusMinutes(com.synera.api.operations.RuntimeSettings.number(jdbc,order.tenantId(),"delivery_sla_minutes")),order.id());
         notifyNpp(order.tenantId(), "ORDER_RECEIVED_ISSUE",
                 Map.of("orderId", order.id().toString(), "ticketId", ticketId.toString()));
     }

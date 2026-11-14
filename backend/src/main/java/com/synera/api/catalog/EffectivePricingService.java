@@ -316,11 +316,11 @@ public class EffectivePricingService {
     private String scopedListPredicate(String table, String recordIdColumn) {
         return """
                 (
-                    NOT EXISTS (SELECT 1 FROM """ + table + " s WHERE s.tenant_id = pl.tenant_id AND s."
+                    NOT EXISTS (SELECT 1 FROM """ + " " + table + " s WHERE s.tenant_id = pl.tenant_id AND s."
                 + recordIdColumn + """
                         = pl.id)
                     OR EXISTS (
-                        SELECT 1 FROM """ + table + " s WHERE s.tenant_id = pl.tenant_id AND s."
+                        SELECT 1 FROM """ + " " + table + " s WHERE s.tenant_id = pl.tenant_id AND s."
                 + recordIdColumn + """
                             = pl.id AND (
                                 (s.scope_type = 'NPP' AND s.scope_id = ?)

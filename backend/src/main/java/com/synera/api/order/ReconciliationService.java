@@ -473,6 +473,12 @@ public class ReconciliationService {
                 SELECT id FROM tenant WHERE tenant_type = 'NSX' AND status = 'ACTIVE'
                 """, (rs, row) -> rs.getObject("id", UUID.class));
         for (UUID tenantId : nsxTenants) {
+            snapshotDay(tenantId,day);
+        }
+    }
+
+    @Transactional
+    public long snapshotDay(UUID tenantId,LocalDate day) {
             UUID periodId = jdbc.queryForObject("""
                     INSERT INTO period (id, tenant_id, period_type, starts_on, ends_on, status)
                     VALUES (?, ?, 'DAY', ?, ?, 'OPEN')
@@ -481,7 +487,28 @@ public class ReconciliationService {
                     RETURNING id
                     """, UUID.class, UUID.randomUUID(), tenantId, day, day);
             refreshPeriod(loadPeriod(periodId));
+            return jdbc.queryForObject("SELECT count(*) FROM reconciliation WHERE period_id=?",Long.class,periodId);
+    }
+
+    /** T+1 closes only days whose human confirmations and three-way checks are already complete. */
+    @Transactional
+    public long closeReadyDays(UUID tenantId,LocalDate through) {
+        // Prevent concurrent inserts/line edits between readiness checks and the CLOSED write.
+        // Held only by the closing transaction; a deadlock aborts and is retried by the job runner.
+        jdbc.execute("LOCK TABLE order_si,order_line IN SHARE ROW EXCLUSIVE MODE");
+        var days=jdbc.query("SELECT id FROM period WHERE tenant_id=? AND period_type='DAY' AND status='OPEN' AND ends_on<=? ORDER BY starts_on FOR UPDATE",(rs,row)->rs.getObject(1,UUID.class),tenantId,through);
+        long closed=0;
+        for(UUID id:days){
+            PeriodView period=loadPeriod(id);
+            long unfinished=jdbc.queryForObject("SELECT count(*) FROM order_si WHERE tenant_id=? AND deleted_at IS NULL AND created_at>=? AND created_at<? AND status NOT IN('RECONCILED','PERIOD_CLOSED','CANCELLED','REJECTED')",Long.class,tenantId,start(period.startsOn()),start(period.endsOn().plusDays(1)));
+            long expected=jdbc.queryForObject("SELECT count(DISTINCT npp_tenant_id) FROM tenant_relation WHERE nsx_tenant_id=? AND status='ACTIVE' AND effective_from<=? AND (effective_to IS NULL OR effective_to>=?)",Long.class,tenantId,period.endsOn(),period.startsOn());
+            long confirmed=jdbc.queryForObject("SELECT count(*) FROM reconciliation WHERE tenant_id=? AND period_id=? AND status='CONFIRMED'",Long.class,tenantId,id);
+            long exceptions=jdbc.queryForObject("SELECT count(*) FROM reconciliation_exception e JOIN reconciliation r ON r.id=e.reconciliation_id WHERE r.period_id=? AND e.status='OPEN'",Long.class,id);
+            if(unfinished!=0||expected!=confirmed||exceptions!=0)continue;
+            closeReconciledOrders(period);
+            closed+=jdbc.update("UPDATE period SET status='CLOSED',closed_at=CURRENT_TIMESTAMP,updated_at=CURRENT_TIMESTAMP,version=version+1 WHERE id=? AND status='OPEN'",id);
         }
+        return closed;
     }
 
     private ApiPage<ReportRow> report(
@@ -489,6 +516,7 @@ public class ReconciliationService {
             String permission, boolean official) {
         BusinessAccessService.Actor actor = access.actor(jwt);
         PeriodView period = requireAccessiblePeriod(jwt, actor, permission, periodId);
+        BigDecimal warningThreshold=BigDecimal.valueOf(com.synera.api.operations.RuntimeSettings.number(jdbc,period.tenantId(),"variance_warning_percent"));
         if (official && !"CLOSED".equals(period.status())) {
             throw conflict("OFFICIAL_REPORT_PERIOD_NOT_CLOSED",
                     "Báo cáo chính thức chỉ có sau khi kỳ được chốt.");
@@ -524,7 +552,7 @@ public class ReconciliationService {
                         AND a.period_id = r.period_id AND a.npp_tenant_id = r.npp_tenant_id
                         AND a.status = 'APPROVED'
                     WHERE r.period_id = ? AND
-                    """ + baseWhere + """
+                    """ + baseWhere + "\n" + """
                     GROUP BY r.npp_tenant_id, n.name, r.ordered_amount_vnd,
                         r.shipped_amount_vnd, r.received_amount_vnd, p.closed_at
                     ORDER BY n.name, r.npp_tenant_id LIMIT ? OFFSET ?
@@ -533,7 +561,7 @@ public class ReconciliationService {
                             rs.getLong("ordered_amount_vnd"), rs.getLong("shipped_amount_vnd"),
                             rs.getLong("received_amount_vnd"), rs.getLong("ordered_adjustment"),
                             rs.getLong("shipped_adjustment"), rs.getLong("received_adjustment"),
-                            rs.getObject("as_of", OffsetDateTime.class), null),
+                            rs.getObject("as_of", OffsetDateTime.class), null,warningThreshold),
                     officialArgs.toArray());
             return ApiPage.of(rows, page, size, total == null ? 0 : total);
         }
@@ -573,7 +601,7 @@ public class ReconciliationService {
                 LEFT JOIN order_line ol ON ol.tenant_id = os.tenant_id AND ol.order_si_id = os.id
                     AND ol.deleted_at IS NULL
                 WHERE
-                """ + liveWhere + """
+                """ + liveWhere + "\n" + """
                 GROUP BY r.npp_tenant_id, n.name
                 ORDER BY n.name, r.npp_tenant_id LIMIT ? OFFSET ?
                 """, (rs, row) -> {
@@ -582,12 +610,11 @@ public class ReconciliationService {
             long received = rs.getLong("received_amount");
             return reportRow(rs.getObject("npp_tenant_id", UUID.class), rs.getString("npp_name"),
                     ordered, shipped, received, 0, 0, 0,
-                    rs.getObject("as_of", OffsetDateTime.class), null);
+                    rs.getObject("as_of", OffsetDateTime.class), null,warningThreshold);
         }, queryArgs.toArray());
 
         if (!official) {
-            List<ReportRow> rowsWithVariance = rows.stream()
-                    .map(row -> compareWithOfficial(row, periodId)).toList();
+            List<ReportRow> rowsWithVariance = compareWithOfficial(rows,periodId,warningThreshold);
             return ApiPage.of(rowsWithVariance, page, size, total);
         }
         return ApiPage.of(rows, page, size, total);
@@ -735,21 +762,25 @@ public class ReconciliationService {
                 start(period.endsOn().plusDays(1)));
     }
 
-    private ReportRow compareWithOfficial(ReportRow live, UUID periodId) {
-        OfficialAmounts official = jdbc.query("""
-                SELECT COALESCE(r.received_amount_vnd, 0)
+    private List<ReportRow> compareWithOfficial(List<ReportRow> rows, UUID periodId,BigDecimal warningThreshold) {
+        if(rows.isEmpty())return rows;
+        String marks=String.join(",",rows.stream().map(row->"?").toList());
+        List<Object> arguments=new ArrayList<>();arguments.add(periodId);rows.forEach(row->arguments.add(row.nppTenantId()));
+        Map<UUID,OfficialAmounts> amounts=new java.util.HashMap<>();
+        jdbc.query("""
+                SELECT r.npp_tenant_id,COALESCE(r.received_amount_vnd, 0)
                        + COALESCE(SUM(CASE WHEN a.metric_key = 'RECEIVED'
                                            THEN a.amount_vnd ELSE 0 END), 0) AS amount,
                     COUNT(r.id) AS found
                 FROM period p
-                LEFT JOIN reconciliation r ON r.period_id = p.id
-                    AND r.npp_tenant_id = ?
+                JOIN reconciliation r ON r.period_id = p.id AND r.tenant_id=p.tenant_id
                 LEFT JOIN period_adjustment a ON a.period_id = p.id
                     AND a.npp_tenant_id = r.npp_tenant_id AND a.status = 'APPROVED'
-                WHERE p.id = ? AND p.status = 'CLOSED'
-                GROUP BY r.received_amount_vnd
-                """, rs -> rs.next() ? new OfficialAmounts(rs.getLong("amount"), rs.getLong("found")) : null,
-                live.nppTenantId(), periodId);
+                WHERE p.id = ? AND p.status = 'CLOSED' AND r.npp_tenant_id IN (
+                """+marks+") GROUP BY r.npp_tenant_id,r.received_amount_vnd",
+                (org.springframework.jdbc.core.RowCallbackHandler)rs->amounts.put(rs.getObject("npp_tenant_id",UUID.class),new OfficialAmounts(rs.getLong("amount"),rs.getLong("found"))),arguments.toArray());
+        return rows.stream().map(live->{
+        OfficialAmounts official=amounts.get(live.nppTenantId());
         BigDecimal variance = official == null || official.found() == 0 ? null
                 : variance(live.receivedAmountVnd(), official.amount());
         long officialAmount = official == null || official.found() == 0
@@ -757,18 +788,19 @@ public class ReconciliationService {
         return new ReportRow(live.nppTenantId(), live.nppName(), live.orderedAmountVnd(),
                 live.shippedAmountVnd(), live.receivedAmountVnd(), live.orderedAdjustmentVnd(),
                 live.shippedAdjustmentVnd(), live.receivedAdjustmentVnd(), officialAmount, live.asOf(),
-                variance, variance != null && variance.compareTo(BigDecimal.valueOf(5)) > 0);
+                variance, variance != null && variance.compareTo(warningThreshold) > 0);
+        }).toList();
     }
 
     ReportRow reportRow(
             UUID nppId, String nppName, long ordered, long shipped, long received,
             long orderedAdjustment, long shippedAdjustment, long receivedAdjustment,
-            OffsetDateTime asOf, Long officialReceived) {
+            OffsetDateTime asOf, Long officialReceived,BigDecimal warningThreshold) {
         long official = officialReceived == null ? received + receivedAdjustment : officialReceived;
         BigDecimal variance = variance(received, official);
         return new ReportRow(nppId, nppName, ordered, shipped, received,
                 orderedAdjustment, shippedAdjustment, receivedAdjustment, official, asOf,
-                variance, variance != null && variance.compareTo(BigDecimal.valueOf(5)) > 0);
+                variance, variance != null && variance.compareTo(warningThreshold) > 0);
     }
 
     private BigDecimal variance(long current, long official) {

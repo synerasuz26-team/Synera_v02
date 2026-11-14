@@ -46,7 +46,7 @@ public class PartnerAccessService {
                 + "WHERE onp.outlet_id = " + alias + ".id AND tr.nsx_tenant_id = ? "
                 + "AND onp.status IN ('ACTIVE', 'PENDING') AND tr.status = 'ACTIVE' "
                 + "AND onp.effective_from <= ? AND (onp.effective_to IS NULL OR onp.effective_to >= ?) "
-                + "AND tr.effective_from <= ? AND (tr.effective_to IS NULL OR tr.effective_to >= ?))";
+                + "AND tr.effective_from <= ? AND (tr.effective_to IS NULL OR tr.effective_to >= ?)))";
         List<Object> arguments = new ArrayList<>(List.of(
                 actor.tenantId(), actor.tenantId(), today, today, today, today));
         if ("A".equals(scope.scope())) {

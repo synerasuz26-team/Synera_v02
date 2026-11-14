@@ -24,7 +24,7 @@ public class OrderFlowService {
                 SELECT EXISTS (
                     SELECT 1 FROM order_status_transition
                     WHERE flow_type = ? AND from_status = ? AND to_status = ?
-                      AND ((? = TRUE AND actor = 'SYSTEM' AND required_permission = 'SYSTEM')
+                      AND ((? = TRUE AND required_permission = 'SYSTEM')
                         OR (? = FALSE AND required_permission = ?))
                 )
                 """, Boolean.class, flowType, fromStatus, toStatus, system, system, permission);

@@ -71,12 +71,12 @@ public class CatalogScopeService {
         return """
                 (
                     NOT EXISTS (
-                        SELECT 1 FROM """ + table + " s WHERE s.tenant_id = " + recordAlias
+                        SELECT 1 FROM """ + " " + table + " s WHERE s.tenant_id = " + recordAlias
                 + ".tenant_id AND s." + recordIdColumn + " = " + recordAlias + """
                             .id
                     )
                     OR EXISTS (
-                        SELECT 1 FROM """ + table + " s WHERE s.tenant_id = " + recordAlias
+                        SELECT 1 FROM """ + " " + table + " s WHERE s.tenant_id = " + recordAlias
                 + ".tenant_id AND s." + recordIdColumn + " = " + recordAlias + """
                             .id AND (
                                 (s.scope_type = 'NPP' AND s.scope_id = ?)
