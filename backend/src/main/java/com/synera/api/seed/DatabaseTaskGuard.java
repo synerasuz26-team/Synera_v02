@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 public final class DatabaseTaskGuard {
-    private static final Set<String> TASKS = Set.of("migrate", "seed:system", "seed:demo", "reset:dev");
+    private static final Set<String> TASKS = Set.of("migrate", "seed:system", "seed:demo", "reset:dev", "purge:demo:plan", "purge:demo");
 
     private DatabaseTaskGuard() {
     }
@@ -14,7 +14,10 @@ public final class DatabaseTaskGuard {
         if (!TASKS.contains(task)) {
             throw new IllegalArgumentException("Lệnh cơ sở dữ liệu không được hỗ trợ.");
         }
-        requireDevTarget(environment);
+        if(task.startsWith("purge:demo")||task.equals("seed:demo")) requireDemoTarget(environment);
+        else requireDevTarget(environment);
+        if(task.equals("purge:demo")&&!"DELETE_DEMO_ONLY".equals(environment.get("PURGE_DEMO_CONFIRM")))
+            throw new IllegalStateException("purge:demo yêu cầu PURGE_DEMO_CONFIRM=DELETE_DEMO_ONLY; hãy chạy purge:demo:plan trước.");
         if (task.equals("seed:demo")) {
             requireDemoPassword(environment);
         }
@@ -26,6 +29,15 @@ public final class DatabaseTaskGuard {
                 requireDemoPassword(environment);
             }
         }
+    }
+
+    public static void requireDemoTarget(Map<String,String> environment) {
+        String app=environment.getOrDefault("APP_ENV","");
+        if(!Set.of("dev","staging").contains(app)||!app.equals(environment.get("DB_ENVIRONMENT")))
+            throw new IllegalStateException("Demo chỉ chạy khi APP_ENV và DB_ENVIRONMENT cùng là dev hoặc staging.");
+        String url=environment.getOrDefault("DB_URL","");
+        if(!url.startsWith("jdbc:postgresql:")||url.toLowerCase(Locale.ROOT).matches(".*(prod|production).*"))
+            throw new IllegalStateException("Đích database không hợp lệ hoặc có dấu hiệu production.");
     }
 
     public static void requireDevTarget(Map<String, String> environment) {

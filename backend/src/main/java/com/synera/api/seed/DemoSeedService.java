@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.core.env.Environment;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +26,7 @@ import java.util.UUID;
 
 @Service
 public class DemoSeedService {
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(DemoSeedService.class);
     private static final String NSX = "SUOI_VIET";
     private static final String MINH_PHAT = "MINH_PHAT";
     private static final String DEMO_SEED_PASSWORD_KEY = "SEED_DEMO_PASSWORD";
@@ -31,6 +34,7 @@ public class DemoSeedService {
     private final JdbcTemplate jdbc;
     private final ObjectMapper objectMapper;
     private final PasswordEncoder passwordEncoder;
+    private final Environment environment;
     private final Map<String, UUID> tenantIds = new HashMap<>();
     private final Map<String, UUID> userIds = new HashMap<>();
     private final Map<String, UUID> orgUnitIds = new HashMap<>();
@@ -41,14 +45,18 @@ public class DemoSeedService {
     private final Map<String, UUID> ticketIds = new HashMap<>();
     private final Map<String, Integer> caseUnits = new HashMap<>();
 
-    public DemoSeedService(JdbcTemplate jdbc, ObjectMapper objectMapper, PasswordEncoder passwordEncoder) {
+    public DemoSeedService(JdbcTemplate jdbc, ObjectMapper objectMapper, PasswordEncoder passwordEncoder, Environment environment) {
         this.jdbc = jdbc;
         this.objectMapper = objectMapper;
         this.passwordEncoder = passwordEncoder;
+        this.environment = environment;
     }
 
     @Transactional
     public void seed(String demoPassword) {
+        Map<String,String> target=new HashMap<>();
+        for(String key:Set.of("APP_ENV","DB_ENVIRONMENT","DB_URL"))target.put(key,environment.getProperty(key,""));
+        DatabaseTaskGuard.requireDemoTarget(target);
         if (demoPassword == null || demoPassword.isBlank()) {
             throw new IllegalStateException("Thiếu biến môi trường " + DEMO_SEED_PASSWORD_KEY + ".");
         }
@@ -62,27 +70,37 @@ public class DemoSeedService {
         ticketIds.clear();
         caseUnits.clear();
         JsonNode seed = readSeed();
-        seedTenants(seed.path("tenants"));
-        seedUsers(seed.path("users"), demoPassword);
-        seedOrgUnits(seed.path("orgUnits"));
-        seedOutlets(seed.path("outlets"));
-        seedRoutes(seed.path("routes"));
-        seedRelations(seed.path("tenantRelations"), seed.path("outletNpp"));
-        seedProducts(seed.path("products"));
-        seedPriceList(seed.path("products"));
-        seedPromotions(seed.path("promotions"));
-        seedPeriods(seed.path("closeSchedule"));
-        seedOrders(seed.path("orders"));
-        seedDailySeries(seed.path("dailySellIn30d"), seed.path("dailySellOut30d"));
-        seedInventory(seed.path("products"));
-        seedDemandPlans(seed.path("demandPlan"));
-        seedVisits(seed.path("visits"));
-        seedTickets(seed.path("tickets"));
-        seedAppointments(seed.path("appointments"));
-        seedFinance(seed.path("financeRows"));
-        seedTarget(seed.path("dashboard"));
-        seedAuditLog(seed.path("actionLog"));
-        seedTenantConfig(seed);
+        runStage("tenants", () -> seedTenants(seed.path("tenants")));
+        runStage("users", () -> seedUsers(seed.path("users"), demoPassword));
+        runStage("org_units", () -> seedOrgUnits(seed.path("orgUnits")));
+        runStage("outlets", () -> seedOutlets(seed.path("outlets")));
+        runStage("routes", () -> seedRoutes(seed.path("routes")));
+        runStage("relations", () -> seedRelations(seed.path("tenantRelations"), seed.path("outletNpp")));
+        runStage("products", () -> seedProducts(seed.path("products")));
+        runStage("price_list", () -> seedPriceList(seed.path("products")));
+        runStage("promotions", () -> seedPromotions(seed.path("promotions")));
+        runStage("periods", () -> seedPeriods(seed.path("closeSchedule")));
+        runStage("orders", () -> seedOrders(seed.path("orders")));
+        runStage("daily_series", () -> seedDailySeries(seed.path("dailySellIn30d"), seed.path("dailySellOut30d")));
+        runStage("inventory", () -> seedInventory(seed.path("products")));
+        runStage("demand_plans", () -> seedDemandPlans(seed.path("demandPlan")));
+        runStage("visits", () -> seedVisits(seed.path("visits")));
+        runStage("tickets", () -> seedTickets(seed.path("tickets")));
+        runStage("appointments", () -> seedAppointments(seed.path("appointments")));
+        runStage("finance", () -> seedFinance(seed.path("financeRows")));
+        runStage("targets", () -> seedTarget(seed.path("dashboard")));
+        runStage("audit_log", () -> seedAuditLog(seed.path("actionLog")));
+        runStage("tenant_config", () -> seedTenantConfig(seed));
+    }
+
+    private void runStage(String name, Runnable stage) {
+        try {
+            stage.run();
+        } catch (RuntimeException exception) {
+            LOGGER.error("demo_seed_stage_failure stage={} exceptionType={}",
+                    name, exception.getClass().getSimpleName());
+            throw exception;
+        }
     }
 
     private JsonNode readSeed() {
@@ -97,14 +115,17 @@ public class DemoSeedService {
         rows.forEach(row -> {
             String code = text(row, "code");
             UUID id = id("tenant:" + code);
+            UUID existing=jdbc.query("SELECT id FROM tenant WHERE code=?",rs->rs.next()?rs.getObject("id",UUID.class):null,code);
+            if(existing!=null&&!existing.equals(id))throw new IllegalStateException("Không ghi đè tenant thật trùng mã với demo: "+code);
             tenantIds.put(code, id);
             jdbc.update("""
-                    INSERT INTO tenant (id, tenant_type, code, name, status)
-                    VALUES (?, ?, ?, ?, 'ACTIVE')
+                    INSERT INTO tenant (id, tenant_type, code, name, status, is_demo)
+                    VALUES (?, ?, ?, ?, 'ACTIVE', TRUE)
                     ON CONFLICT (code) DO UPDATE SET
                         tenant_type = EXCLUDED.tenant_type,
                         name = EXCLUDED.name,
-                        status = EXCLUDED.status
+                        status = EXCLUDED.status,
+                        is_demo = TRUE
                     """, id, text(row, "type"), code, text(row, "name"));
         });
     }
@@ -117,7 +138,7 @@ public class DemoSeedService {
             UUID preferredUserId = id("user:" + email);
             UUID tenantId = require(tenantIds, tenantCode, "tenant");
             UserCredential account = jdbc.query(
-                    "SELECT id, password_hash FROM app_users WHERE email = ?",
+                    "SELECT id, tenant_id, password_hash FROM app_users WHERE email = ?",
                     resultSet -> resultSet.next() ? mapUserCredential(resultSet) : null,
                     email);
             if (account == null) {
@@ -127,7 +148,7 @@ public class DemoSeedService {
                     ON CONFLICT (email) DO NOTHING
                     """, preferredUserId, tenantId, text(row, "name"), email, passwordHash);
                 account = jdbc.query(
-                        "SELECT id, password_hash FROM app_users WHERE email = ?",
+                        "SELECT id, tenant_id, password_hash FROM app_users WHERE email = ?",
                         resultSet -> resultSet.next() ? mapUserCredential(resultSet) : null,
                         email);
             }
@@ -135,6 +156,8 @@ public class DemoSeedService {
                 throw new IllegalStateException("Không thể tạo tài khoản demo: " + email);
             }
             UUID userId = account.id();
+            if(!tenantId.equals(account.tenantId())||!preferredUserId.equals(account.id()))
+                throw new IllegalStateException("Không ghi đè tài khoản thật trùng email với dữ liệu demo.");
             userIds.put(email, userId);
             if (!passwordEncoder.matches(demoPassword, account.passwordHash())) {
                 jdbc.update("""
@@ -163,10 +186,10 @@ public class DemoSeedService {
     }
 
     private UserCredential mapUserCredential(ResultSet resultSet) throws SQLException {
-        return new UserCredential(resultSet.getObject("id", UUID.class), resultSet.getString("password_hash"));
+        return new UserCredential(resultSet.getObject("id", UUID.class), resultSet.getObject("tenant_id",UUID.class), resultSet.getString("password_hash"));
     }
 
-    private record UserCredential(UUID id, String passwordHash) {
+    private record UserCredential(UUID id, UUID tenantId, String passwordHash) {
     }
 
     private void seedOrgUnits(JsonNode rows) {
@@ -534,7 +557,7 @@ public class DemoSeedService {
                             received_qty, unit_price_vnd, is_gift, gross_amount_vnd, discount_vnd,
                             line_amount_vnd
                         )
-                        VALUES (?, ?, ?, ?, ?, ?, 'THUNG', ?, ?, ?, ?, ?, ?, ?, 0, ?)
+                        VALUES (?, ?, ?, ?, ?, ?, 'THUNG', ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)
                         ON CONFLICT (id) DO UPDATE SET
                             unit_code = EXCLUDED.unit_code,
                             entered_qty = EXCLUDED.entered_qty,

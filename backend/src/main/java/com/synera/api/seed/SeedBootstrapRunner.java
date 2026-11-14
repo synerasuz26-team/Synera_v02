@@ -5,11 +5,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.env.Environment;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 @Component
 @Order(10)
-@ConditionalOnProperty(name = "app.task", matchIfMissing = true)
 public class SeedBootstrapRunner implements ApplicationRunner {
     private final Environment environment;
     private final SystemSeedService systemSeedService;
@@ -26,6 +24,13 @@ public class SeedBootstrapRunner implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
+        // CLI tasks own their seed/migration lifecycle; a dry-run must never seed implicitly.
+        if(environment.containsProperty("app.task")) return;
+        if(environment.getProperty("SEED_DEMO",Boolean.class,false)) {
+            var target=new java.util.HashMap<String,String>();
+            for(String key:java.util.List.of("APP_ENV","DB_ENVIRONMENT","DB_URL"))target.put(key,environment.getProperty(key,""));
+            DatabaseTaskGuard.requireDemoTarget(target);
+        }
         systemSeedService.seed();
         if (environment.getProperty("SEED_DEMO", Boolean.class, false)) {
             String appEnvironment = environment.getProperty("APP_ENV", "");

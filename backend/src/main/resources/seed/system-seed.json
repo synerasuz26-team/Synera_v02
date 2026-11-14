@@ -132,6 +132,14 @@
   ],
   "permissions": [
     {
+      "code": "foundation:import",
+      "module": "Nhập dữ liệu nền",
+      "description": "Nhập dữ liệu nền trong phạm vi tenant",
+      "sensitive": true,
+      "phase": "P5",
+      "notes": "Chỉ NSX_ADMIN, NPP_OWNER/NPP_STAFF theo loại dữ liệu; kiểm lại quyền ở backend."
+    },
+    {
       "code": "app:admin_console",
       "module": "0. Truy cập ứng dụng",
       "description": "Đăng nhập Admin console nền tảng",
@@ -997,6 +1005,9 @@
     }
   ],
   "rolePermissions": [
+    { "roleCode": "NSX_ADMIN", "permissionCode": "foundation:import", "scope": "A" },
+    { "roleCode": "NPP_OWNER", "permissionCode": "foundation:import", "scope": "A" },
+    { "roleCode": "NPP_STAFF", "permissionCode": "foundation:import", "scope": "A" },
     {
       "roleCode": "SYS_ADMIN",
       "permissionCode": "app:admin_console",

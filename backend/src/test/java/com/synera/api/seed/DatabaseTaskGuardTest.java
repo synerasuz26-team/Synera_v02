@@ -58,4 +58,16 @@ class DatabaseTaskGuardTest {
         environment.put("SEED_DEMO_PASSWORD", "configured-out-of-band");
         assertDoesNotThrow(() -> DatabaseTaskGuard.validate(environment, "seed:demo"));
     }
+    @Test
+    void demoCleanupRequiresConfirmationAndRefusesProductionEvenWhenConfirmed() {
+        var environment=devEnvironment();
+        assertDoesNotThrow(()->DatabaseTaskGuard.validate(environment,"purge:demo:plan"));
+        assertThrows(IllegalStateException.class,()->DatabaseTaskGuard.validate(environment,"purge:demo"));
+        environment.put("PURGE_DEMO_CONFIRM","DELETE_DEMO_ONLY");
+        assertDoesNotThrow(()->DatabaseTaskGuard.validate(environment,"purge:demo"));
+        environment.put("APP_ENV","production");environment.put("DB_ENVIRONMENT","production");
+        assertThrows(IllegalStateException.class,()->DatabaseTaskGuard.validate(environment,"purge:demo"));
+        environment.put("SEED_DEMO_PASSWORD","configured-out-of-band");
+        assertThrows(IllegalStateException.class,()->DatabaseTaskGuard.validate(environment,"seed:demo"));
+    }
 }

@@ -48,6 +48,6 @@ class PermissionMatrixTest {
                 checkedPairs++;
             }
         }
-        assertEquals(16 * 108, checkedPairs);
+        assertEquals(16 * 109, checkedPairs);
     }
 }
